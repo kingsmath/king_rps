@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 
-<head><script async src="https://www.googletagmanager.com/gtag/js?id=G-5YW0T2C109"></script>
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5YW0T2C109"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -9,1854 +10,1858 @@
 
         gtag('config', 'G-5YW0T2C109');
     </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>가위바위보킹</title>
-  <!-- Google Fonts for retro/cyber styling -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;700&family=Noto+Sans+KR:wght@400;700;900&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #06060c;
-      --panel-bg: rgba(18, 18, 30, 0.6);
-      --panel-border: rgba(255, 255, 255, 0.08);
-      --font-primary: 'Noto Sans KR', 'Inter', sans-serif;
-      --font-display: 'Orbitron', sans-serif;
-
-      /* Player Colors for CSS */
-      --p1-color: #ff2d55;
-      --p2-color: #007aff;
-      --p3-color: #4cd964;
-      --p4-color: #ffcc00;
-      --p5-color: #af52de;
-      --p6-color: #00c7be;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body {
-      background: radial-gradient(circle at 50% 50%, #151525 0%, #06060c 100%);
-      color: #ffffff;
-      font-family: var(--font-primary);
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      /* Vertically center screen layout */
-      touch-action: none;
-      /* Block zoom and scroll completely */
-    }
-
-    /* GLOBAL NAV BUTTONS */
-    .nav-btn {
-      position: absolute;
-      top: 15px;
-      z-index: 100;
-      width: 44px;
-      height: 44px;
-      background: rgba(18, 18, 30, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: #ffffff;
-      font-size: 1.3rem;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      touch-action: manipulation;
-    }
-
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.25);
-      transform: scale(1.05);
-    }
-
-    #home-btn {
-      left: 15px;
-      display: none;
-      /* Hidden on first screen by default */
-    }
-
-    #fullscreen-btn {
-      right: 15px;
-    }
-
-    /* Top-Right Language Selector */
-    .lang-selector-top {
-      position: absolute;
-      top: 15px;
-      right: 74px; /* fullscreen-btn(44px) + margin(15px) + gap */
-      z-index: 100;
-      display: flex;
-      gap: 6px;
-      height: 44px;
-      align-items: center;
-    }
-
-    .lang-selector-top .lang-btn {
-      background: rgba(18, 18, 30, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: rgba(255, 255, 255, 0.6);
-      padding: 6px 12px;
-      font-family: var(--font-primary);
-      font-size: 0.85rem;
-      font-weight: 800;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      touch-action: manipulation;
-    }
-
-    .lang-selector-top .lang-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-    }
-
-    .lang-selector-top .lang-btn.active {
-      background: #007aff;
-      border-color: #00a2ff;
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(0, 122, 255, 0.45);
-    }
-
-    /* Screen container styling */
-    .screen {
-      display: none;
-      width: 100%;
-      height: 100%;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      position: relative;
-    }
-
-    .screen.active {
-      display: flex;
-    }
-
-    /* PRESTIGE GLASS CARD DESIGN */
-    .glass-card {
-      background: var(--panel-bg);
-      border: 1px solid var(--panel-border);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-
-    /* LOBBY CONTAINER */
-    .lobby-container {
-      width: 100%;
-      max-width: 520px;
-      padding: 16px 28px;
-      text-align: center;
-      animation: slideIn 0.5s ease-out;
-      position: relative;
-      overflow: hidden;
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* 타이틀 및 묵찌빠 아기자기한 애니메이션 디자인 */
-    .lobby-header {
-      margin-bottom: 8px;
-      position: relative;
-    }
-
-    .lobby-title-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .floating-title-img {
-      width: 44px;
-      height: 44px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
-      animation: floatMukPpa 3s ease-in-out infinite alternate;
-    }
-
-    .img-muk {
-      animation-delay: 0s;
-    }
-
-    .img-ppa {
-      animation-delay: 0.5s;
-    }
-
-    .sub-title-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-top: 1px;
-    }
-
-    .floating-title-img-small {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 6px rgba(0, 122, 255, 0.6));
-      animation: floatJji 2.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes floatMukPpa {
-      0% {
-        transform: translateY(0px) rotate(-6deg);
-      }
-
-      100% {
-        transform: translateY(-6px) rotate(6deg);
-      }
-    }
-
-    @keyframes floatJji {
-      0% {
-        transform: translateY(0px) scale(0.92);
-      }
-
-      100% {
-        transform: translateY(-4px) scale(1.08);
-      }
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 900;
-      margin-bottom: 0px;
-      background: linear-gradient(90deg, #ff2d55, #007aff, #4cd964, #ffcc00);
-      background-size: 300% 300%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: textGradient 8s ease infinite;
-      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
-    }
-
-    .sub-title {
-      font-family: var(--font-primary);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #007aff;
-      letter-spacing: 1px;
-      text-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
-    }
-
-    @keyframes textGradient {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    /* Interactive Rules Container */
-    .rules-container {
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 12px;
-      padding: 10px 14px;
-      margin-bottom: 12px;
-      text-align: left;
-    }
-
-    .rules-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      padding-bottom: 6px;
-      margin-bottom: 8px;
-    }
-
-    .rules-title {
-      font-family: var(--font-primary);
-      font-size: 0.85rem;
-      color: #00c7be;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 800;
-    }
-
-    .rules-col {
-      width: 100%;
-    }
-
-    .rules-content p {
-      font-size: 0.78rem;
-      line-height: 1.4;
-      color: rgba(255, 255, 255, 0.75);
-      margin-bottom: 3px;
-    }
-
-    .setup-section {
-      margin-bottom: 12px;
-      text-align: left;
-    }
-
-    .setup-label {
-      font-family: var(--font-primary);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-      color: rgba(255, 255, 255, 0.5);
-      border-left: 3px solid #007aff;
-      padding-left: 6px;
-      font-weight: bold;
-    }
-
-    .grid-options {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 6px;
-    }
-
-    .grid-options-2 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-    }
-
-    .opt-btn {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.7);
-      padding: 8px 4px;
-      font-family: var(--font-primary);
-      font-size: 0.9rem;
-      font-weight: 800;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      touch-action: manipulation;
-    }
-
-    .opt-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #ffffff;
-    }
-
-    .opt-btn.active {
-      background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
-      border-color: #00a2ff;
-      color: #ffffff;
-      box-shadow: 0 0 15px rgba(0, 122, 255, 0.4);
-      transform: translateY(-1px);
-    }
-
-    /* 속도 제어 디자인 */
-    .speed-control-container {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      background: rgba(0, 0, 0, 0.15);
-      padding: 6px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    #speed-slider {
-      flex: 1;
-      -webkit-appearance: none;
-      background: rgba(255, 255, 255, 0.1);
-      height: 6px;
-      border-radius: 3px;
-      outline: none;
-      cursor: pointer;
-    }
-
-    #speed-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #007aff;
-      cursor: pointer;
-      box-shadow: 0 0 10px #007aff;
-      transition: transform 0.1s;
-    }
-
-    #speed-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-    }
-
-    .speed-preview-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 90px;
-      gap: 2px;
-    }
-
-    #speed-label {
-      font-family: var(--font-primary);
-      font-size: 0.72rem;
-      font-weight: bold;
-      color: #00c7be;
-    }
-
-    .speed-preview-box {
-      width: 80px;
-      height: 24px;
-      background: rgba(0, 0, 0, 0.35);
-      border-radius: 5px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    #speed-preview-runner {
-      position: absolute;
-      left: 0;
-      top: 2px;
-      animation: runnerLoop 2s linear infinite alternate;
-    }
-
-    @keyframes runnerLoop {
-      0% {
-        left: 4px;
-      }
-
-      100% {
-        left: 56px;
-      }
-    }
-
-    #start-btn {
-      width: 100%;
-      background: linear-gradient(90deg, #ff2d55 0%, #007aff 100%);
-      border: none;
-      color: #ffffff;
-      padding: 12px;
-      font-family: var(--font-primary);
-      font-size: 1.25rem;
-      font-weight: 900;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 6px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      box-shadow: 0 4px 18px rgba(255, 45, 85, 0.3);
-      transition: all 0.25s ease;
-      touch-action: manipulation;
-    }
-
-    #start-btn:active {
-      transform: scale(0.98);
-    }
-
-    .more-games-link {
-      display: inline-block;
-      margin-top: 8px;
-      color: rgba(255, 255, 255, 0.4);
-      text-decoration: none;
-      font-family: var(--font-primary);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      transition: all 0.2s;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
-      padding-bottom: 1px;
-      touch-action: manipulation;
-    }
-
-    .more-games-link:hover {
-      color: #007aff;
-      border-color: #007aff;
-      text-shadow: 0 0 8px rgba(0, 122, 255, 0.3);
-    }
-
-    /* GAME SCREEN */
-    #game-screen {
-      padding: 0;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: stretch;
-      background: #040408;
-    }
-
-    /* Floating Timer Badge */
-    #timer-display {
-      position: absolute;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: #00c7be;
-      text-shadow: 0 0 10px rgba(0, 199, 190, 0.4);
-      background: rgba(8, 8, 12, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 6px 20px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-
-    /* Game Over Center Overlay Modal */
-    #gameover-overlay {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1000;
-      display: none;
-      width: 95%;
-      max-width: 580px;
-      padding: 30px;
-      text-align: center;
-      animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    @keyframes zoomIn {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.9);
-      }
-
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
-    }
-
-    #gameover-overlay h2 {
-      font-family: var(--font-primary);
-      font-size: 2.2rem;
-      color: #ffcc00;
-      text-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
-      margin-bottom: 20px;
-      letter-spacing: 1px;
-    }
-
-    .stats-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      font-size: 0.95rem;
-      text-align: left;
-    }
-
-    .stats-table th {
-      font-family: var(--font-primary);
-      text-transform: uppercase;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.4);
-      padding: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .stats-table td {
-      padding: 12px 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      font-weight: 600;
-    }
-
-    .restart-btn {
-      width: 100%;
-      background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
-      border: none;
-      color: #ffffff;
-      padding: 16px;
-      font-family: var(--font-primary);
-      font-size: 1.25rem;
-      font-weight: 900;
-      border-radius: 12px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      box-shadow: 0 5px 20px rgba(0, 122, 255, 0.35);
-      transition: all 0.2s ease;
-      touch-action: manipulation;
-    }
-
-    .restart-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* Board Container */
-    #board-container {
-      flex: 1;
-      width: 100%;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-      overflow: hidden;
-    }
-
-    canvas {
-      display: block;
-      border-radius: 16px;
-      background-color: #07070c;
-      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 255, 255, 0.01);
-    }
-
-    /* Bottom Control Bar */
-    #control-bar {
-      height: 180px;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      background: rgba(6, 6, 10, 0.97);
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px;
-      gap: 8px;
-      z-index: 10;
-    }
-
-    .control-column {
-      width: calc(100% / 6 - 12px);
-      flex-grow: 0;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border-radius: 14px;
-      padding: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .control-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: var(--font-primary);
-      font-size: 0.75rem;
-      font-weight: 800;
-      margin-bottom: 6px;
-      padding: 0 4px;
-    }
-
-    .control-body {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* <- 배치 방식 */
-      width: 100%;
-      gap: 50px;
-    }
-
-    /* VIRTUAL JOYSTICK LAYOUT */
-    .joystick-container {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      border: 2px dashed var(--p-color);
-      background: rgba(var(--p-rgb), 0.03);
-      position: relative;
-      touch-action: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 0 10px rgba(var(--p-rgb), 0.1);
-    }
-
-    .joystick-knob {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--p-color);
-      position: absolute;
-      box-shadow: 0 0 15px var(--p-color);
-      pointer-events: none;
-      transform: translate(0px, 0px);
-    }
-
-    /* BOOST BUTTON LAYOUT */
-    .boost-btn-wrapper {
-      position: relative;
-      width: 60px;
-      height: 60px;
-    }
-
-    .boost-btn {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.02);
-      border: 2px solid var(--p-color);
-      color: #ffffff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      touch-action: none;
-      outline: none;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(var(--p-rgb), 0.15);
-      transition: all 0.2s;
-    }
-
-    .boost-btn:active {
-      transform: scale(0.95);
-    }
-
-    .boost-btn.active-boost {
-      background: var(--p-color);
-      color: #ffffff;
-      box-shadow: 0 0 20px var(--p-color);
-      border-color: #ffffff;
-    }
-
-    .boost-btn.cooldown {
-      opacity: 0.35;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    .cooldown-ring {
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      transform: rotate(-90deg);
-      pointer-events: none;
-    }
-
-    .ring-bg {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.03);
-      stroke-width: 3;
-    }
-
-    .ring-progress {
-      fill: none;
-      stroke: var(--p-color);
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-dasharray: 163.36;
-      /* 2 * Math.PI * 26 */
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 0.1s linear;
-    }
-
-    .cooldown-text {
-      position: absolute;
-      font-family: var(--font-display);
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: #ffffff;
-      display: none;
-    }
-
-    /* Dead / Rejoin State Overlay */
-    .rejoin-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(8, 8, 12, 0.95);
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 8px;
-      z-index: 5;
-    }
-
-    .rejoin-choice-title {
-      font-family: var(--font-primary);
-      font-size: 0.78rem;
-      color: #ffffff;
-      margin-bottom: 8px;
-      font-weight: bold;
-      text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-    }
-
-    .rejoin-choice-container {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      width: 100%;
-      gap: 6px;
-    }
-
-    .rejoin-choice-btn {
-      flex: 1;
-      height: 80px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: all 0.25s ease;
-      touch-action: manipulation;
-    }
-
-    .rejoin-choice-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--p-color);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(var(--p-rgb), 0.2);
-    }
-
-    .rejoin-choice-btn:active {
-      transform: scale(0.95);
-    }
-
-    .rejoin-choice-btn img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-    }
-
-    .rejoin-choice-btn span {
-      font-family: var(--font-primary);
-      font-size: 0.75rem;
-      margin-top: 6px;
-      color: rgba(255, 255, 255, 0.9);
-      font-weight: bold;
-    }
-
-    .respawn-status {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(8, 8, 12, 0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      font-family: var(--font-primary);
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--p-color);
-      text-shadow: 0 0 10px rgba(var(--p-rgb), 0.4);
-      letter-spacing: 1px;
-      z-index: 4;
-      animation: blink 1s infinite alternate;
-    }
-
-    @keyframes blink {
-      from {
-        opacity: 0.4;
-      }
-
-      to {
-        opacity: 1.0;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>가위바위보킹</title>
+    <!-- Google Fonts for retro/cyber styling -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;700&family=Noto+Sans+KR:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #06060c;
+            --panel-bg: rgba(18, 18, 30, 0.6);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --font-primary: 'Noto Sans KR', 'Inter', sans-serif;
+            --font-display: 'Orbitron', sans-serif;
+
+            /* Player Colors for CSS */
+            --p1-color: #ff2d55;
+            --p2-color: #007aff;
+            --p3-color: #4cd964;
+            --p4-color: #ffcc00;
+            --p5-color: #af52de;
+            --p6-color: #00c7be;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 50%, #151525 0%, #06060c 100%);
+            color: #ffffff;
+            font-family: var(--font-primary);
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Vertically center screen layout */
+            touch-action: none;
+            /* Block zoom and scroll completely */
+        }
+
+        /* GLOBAL NAV BUTTONS */
+        .nav-btn {
+            position: absolute;
+            top: 15px;
+            z-index: 100;
+            width: 44px;
+            height: 44px;
+            background: rgba(18, 18, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #ffffff;
+            font-size: 1.3rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            touch-action: manipulation;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        #home-btn {
+            left: 15px;
+            display: none;
+            /* Hidden on first screen by default */
+        }
+
+        #fullscreen-btn {
+            right: 15px;
+        }
+
+        /* Top-Right Language Selector */
+        .lang-selector-top {
+            position: absolute;
+            top: 15px;
+            right: 74px;
+            /* fullscreen-btn(44px) + margin(15px) + gap */
+            z-index: 100;
+            display: flex;
+            gap: 6px;
+            height: 44px;
+            align-items: center;
+        }
+
+        .lang-selector-top .lang-btn {
+            background: rgba(18, 18, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 6px 12px;
+            font-family: var(--font-primary);
+            font-size: 0.85rem;
+            font-weight: 800;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            touch-action: manipulation;
+        }
+
+        .lang-selector-top .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .lang-selector-top .lang-btn.active {
+            background: #007aff;
+            border-color: #00a2ff;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(0, 122, 255, 0.45);
+        }
+
+        /* Screen container styling */
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* PRESTIGE GLASS CARD DESIGN */
+        .glass-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--panel-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* LOBBY CONTAINER */
+        .lobby-container {
+            width: 100%;
+            max-width: 520px;
+            padding: 16px 28px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 타이틀 및 묵찌빠 아기자기한 애니메이션 디자인 */
+        .lobby-header {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .lobby-title-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .floating-title-img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+            animation: floatMukPpa 3s ease-in-out infinite alternate;
+        }
+
+        .img-muk {
+            animation-delay: 0s;
+        }
+
+        .img-ppa {
+            animation-delay: 0.5s;
+        }
+
+        .sub-title-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1px;
+        }
+
+        .floating-title-img-small {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 6px rgba(0, 122, 255, 0.6));
+            animation: floatJji 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatMukPpa {
+            0% {
+                transform: translateY(0px) rotate(-6deg);
+            }
+
+            100% {
+                transform: translateY(-6px) rotate(6deg);
+            }
+        }
+
+        @keyframes floatJji {
+            0% {
+                transform: translateY(0px) scale(0.92);
+            }
+
+            100% {
+                transform: translateY(-4px) scale(1.08);
+            }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0px;
+            background: linear-gradient(90deg, #ff2d55, #007aff, #4cd964, #ffcc00);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textGradient 8s ease infinite;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        .sub-title {
+            font-family: var(--font-primary);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #007aff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 122, 255, 0.3);
+        }
+
+        @keyframes textGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Interactive Rules Container */
+        .rules-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .rules-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+        }
+
+        .rules-title {
+            font-family: var(--font-primary);
+            font-size: 0.85rem;
+            color: #00c7be;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        .rules-col {
+            width: 100%;
+        }
+
+        .rules-content p {
+            font-size: 0.78rem;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 3px;
+        }
+
+        .setup-section {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .setup-label {
+            font-family: var(--font-primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            color: rgba(255, 255, 255, 0.5);
+            border-left: 3px solid #007aff;
+            padding-left: 6px;
+            font-weight: bold;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+        }
+
+        .grid-options-2 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 8px 4px;
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            touch-action: manipulation;
+        }
+
+        .opt-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        .opt-btn.active {
+            background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
+            border-color: #00a2ff;
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 122, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* 속도 제어 디자인 */
+        .speed-control-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        #speed-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            height: 6px;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #007aff;
+            cursor: pointer;
+            box-shadow: 0 0 10px #007aff;
+            transition: transform 0.1s;
+        }
+
+        #speed-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .speed-preview-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90px;
+            gap: 2px;
+        }
+
+        #speed-label {
+            font-family: var(--font-primary);
+            font-size: 0.72rem;
+            font-weight: bold;
+            color: #00c7be;
+        }
+
+        .speed-preview-box {
+            width: 80px;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        #speed-preview-runner {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            animation: runnerLoop 2s linear infinite alternate;
+        }
+
+        @keyframes runnerLoop {
+            0% {
+                left: 4px;
+            }
+
+            100% {
+                left: 56px;
+            }
+        }
+
+        #start-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #ff2d55 0%, #007aff 100%);
+            border: none;
+            color: #ffffff;
+            padding: 12px;
+            font-family: var(--font-primary);
+            font-size: 1.25rem;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 6px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 18px rgba(255, 45, 85, 0.3);
+            transition: all 0.25s ease;
+            touch-action: manipulation;
+        }
+
+        #start-btn:active {
+            transform: scale(0.98);
+        }
+
+        .more-games-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            font-family: var(--font-primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+            padding-bottom: 1px;
+            touch-action: manipulation;
+        }
+
+        .more-games-link:hover {
+            color: #007aff;
+            border-color: #007aff;
+            text-shadow: 0 0 8px rgba(0, 122, 255, 0.3);
+        }
+
+        /* GAME SCREEN */
+        #game-screen {
+            padding: 0;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: stretch;
+            background: #040408;
+        }
+
+        /* Floating Timer Badge */
+        #timer-display {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #00c7be;
+            text-shadow: 0 0 10px rgba(0, 199, 190, 0.4);
+            background: rgba(8, 8, 12, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 6px 20px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* Game Over Center Overlay Modal */
+        #gameover-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            display: none;
+            width: 95%;
+            max-width: 580px;
+            padding: 30px;
+            text-align: center;
+            animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        #gameover-overlay h2 {
+            font-family: var(--font-primary);
+            font-size: 2.2rem;
+            color: #ffcc00;
+            text-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        .stats-table th {
+            font-family: var(--font-primary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .stats-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-weight: 600;
+        }
+
+        .restart-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #007aff 0%, #0056b3 100%);
+            border: none;
+            color: #ffffff;
+            padding: 16px;
+            font-family: var(--font-primary);
+            font-size: 1.25rem;
+            font-weight: 900;
+            border-radius: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 20px rgba(0, 122, 255, 0.35);
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .restart-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Board Container */
+        #board-container {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            border-radius: 16px;
+            background-color: #07070c;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 255, 255, 0.01);
+        }
+
+        /* Bottom Control Bar */
+        #control-bar {
+            height: 180px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(6, 6, 10, 0.97);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 8px;
+            gap: 8px;
+            z-index: 9999;
+            overflow: visible !important;
+        }
+
+        .control-column {
+            width: calc(100% / 6 - 12px);
+            flex-grow: 0;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-radius: 14px;
+            padding: 8px;
+            position: relative;
+            overflow: visible !important;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            padding: 0 4px;
+        }
+
+        .control-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* <- 배치 방식 */
+            width: 100%;
+            gap: 50px;
+            overflow: visible !important;
+        }
+
+        /* VIRTUAL JOYSTICK LAYOUT */
+        .joystick-container {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px dashed var(--p-color);
+            background: rgba(var(--p-rgb), 0.03);
+            position: relative;
+            touch-action: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(var(--p-rgb), 0.1);
+            z-index: 99999 !important;
+        }
+
+        .joystick-knob {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--p-color);
+            position: absolute;
+            box-shadow: 0 0 15px var(--p-color);
+            pointer-events: none;
+            transform: translate(0px, 0px);
+        }
+
+        /* BOOST BUTTON LAYOUT */
+        .boost-btn-wrapper {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+
+        .boost-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid var(--p-color);
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            outline: none;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(var(--p-rgb), 0.15);
+            transition: all 0.2s;
+        }
+
+        .boost-btn:active {
+            transform: scale(0.95);
+        }
+
+        .boost-btn.active-boost {
+            background: var(--p-color);
+            color: #ffffff;
+            box-shadow: 0 0 20px var(--p-color);
+            border-color: #ffffff;
+        }
+
+        .boost-btn.cooldown {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .cooldown-ring {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            transform: rotate(-90deg);
+            pointer-events: none;
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.03);
+            stroke-width: 3;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke: var(--p-color);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 163.36;
+            /* 2 * Math.PI * 26 */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        .cooldown-text {
+            position: absolute;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            display: none;
+        }
+
+        /* Dead / Rejoin State Overlay */
+        .rejoin-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8, 8, 12, 0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+            z-index: 5;
+        }
+
+        .rejoin-choice-title {
+            font-family: var(--font-primary);
+            font-size: 0.78rem;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+        }
+
+        .rejoin-choice-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .rejoin-choice-btn {
+            flex: 1;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.25s ease;
+            touch-action: manipulation;
+        }
+
+        .rejoin-choice-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--p-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(var(--p-rgb), 0.2);
+        }
+
+        .rejoin-choice-btn:active {
+            transform: scale(0.95);
+        }
+
+        .rejoin-choice-btn img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .rejoin-choice-btn span {
+            font-family: var(--font-primary);
+            font-size: 0.75rem;
+            margin-top: 6px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: bold;
+        }
+
+        .respawn-status {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8, 8, 12, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--p-color);
+            text-shadow: 0 0 10px rgba(var(--p-rgb), 0.4);
+            letter-spacing: 1px;
+            z-index: 4;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            from {
+                opacity: 0.4;
+            }
+
+            to {
+                opacity: 1.0;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- GLOBAL NAV BUTTONS -->
-  <button id="home-btn" class="nav-btn">🏠</button>
-  <div class="lang-selector-top">
-    <button class="lang-btn active" id="lang-ko-btn">KO</button>
-    <button class="lang-btn" id="lang-en-btn">EN</button>
-  </div>
-  <button id="fullscreen-btn" class="nav-btn">⛶</button>
+    <!-- GLOBAL NAV BUTTONS -->
+    <button id="home-btn" class="nav-btn">🏠</button>
+    <div class="lang-selector-top">
+        <button class="lang-btn active" id="lang-ko-btn">KO</button>
+        <button class="lang-btn" id="lang-en-btn">EN</button>
+    </div>
+    <button id="fullscreen-btn" class="nav-btn">⛶</button>
 
-  <!-- 1. LOBBY SCREEN -->
-  <div id="lobby-screen" class="screen active">
-    <div class="lobby-container glass-card">
-      <div class="lobby-header">
-        <div class="lobby-title-container">
-          <img src="1.png" class="floating-title-img img-muk" alt="묵">
-          <h1 id="lobby-title">가위바위보킹</h1>
-          <img src="3.png" class="floating-title-img img-ppa" alt="빠">
-        </div>
-        <div class="sub-title-wrapper">
-          <img src="2.png" class="floating-title-img-small img-jji" alt="찌">
-          <div class="sub-title" id="lobby-subtitle">가위바위보의 최강 왕을 가려라!</div>
-        </div>
-      </div>
-
-      <!-- Interactive Rules Container -->
-      <div class="rules-container">
-        <div class="rules-col">
-          <div class="rules-content" id="rules-text-container">
-            <p>• 조이스틱으로 플레이어를 조종하여 밥과 상대를 잡아먹으세요!</p>
-            <p>• 상성 관계: <b>바위 > 가위 > 보</b>. 지는 상대에게 닿으면 즉시 사망.</p>
-            <p>• 비기는 상대끼리는 충돌 없이 서로 겹쳐서 통과하게 됩니다.</p>
-            <p>• 사망 시 <b>바위/가위/보 중 하나를 선택해 부활</b>하며, 지정 방향으로 발사됩니다.</p>
-            <p>• ⚡ 버튼으로 3초간 부스트 가동 (쿨타임 10초).</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Number of Players -->
-      <div class="setup-section">
-        <div class="setup-label" id="label-players">플레이어 수</div>
-        <div class="grid-options" id="player-options">
-          <button class="opt-btn" data-val="1">1</button>
-          <button class="opt-btn" data-val="2">2</button>
-          <button class="opt-btn" data-val="3">3</button>
-          <button class="opt-btn active" data-val="4">4</button>
-          <button class="opt-btn" data-val="5">5</button>
-          <button class="opt-btn" data-val="6">6</button>
-        </div>
-      </div>
-
-      <!-- Game Mode Selection -->
-      <div class="setup-section">
-        <div class="setup-label" id="label-mode">게임 모드</div>
-        <div class="grid-options-2" id="mode-options">
-          <button class="opt-btn active" data-val="ta-1" id="mode-btn-ta1">1분 시간제</button>
-          <button class="opt-btn" data-val="ta-2" id="mode-btn-ta2">2분 시간제</button>
-          <button class="opt-btn" data-val="ta-3" id="mode-btn-ta3">3분 시간제</button>
-          <button class="opt-btn" data-val="survival" id="mode-btn-survival">서바이벌</button>
-        </div>
-      </div>
-
-      <!-- Food Density Selection -->
-      <div class="setup-section">
-        <div class="setup-label" id="label-density">밥 개수 (밀도)</div>
-        <div class="grid-options-2" id="food-density-options">
-          <button class="opt-btn" data-val="10" id="density-btn-low">한산 (10)</button>
-          <button class="opt-btn active" data-val="20" id="density-btn-med">적당 (20)</button>
-          <button class="opt-btn" data-val="40" id="density-btn-high">복잡 (40)</button>
-        </div>
-      </div>
-
-      <!-- Game Speed Slider & Preview -->
-      <div class="setup-section">
-        <div class="setup-label" id="label-speed">게임 속도</div>
-        <div class="speed-control-container">
-          <input type="range" id="speed-slider" min="0.5" max="2.0" step="0.1" value="1.0">
-          <div class="speed-preview-wrapper">
-            <span id="speed-label">1.0 배속</span>
-            <div class="speed-preview-box">
-              <div id="speed-preview-runner">
-                <img src="2.png" alt="가위" style="width: 18px; height: 18px; object-fit: contain;">
-              </div>
+    <!-- 1. LOBBY SCREEN -->
+    <div id="lobby-screen" class="screen active">
+        <div class="lobby-container glass-card">
+            <div class="lobby-header">
+                <div class="lobby-title-container">
+                    <img src="1.png" class="floating-title-img img-muk" alt="묵">
+                    <h1 id="lobby-title">가위바위보킹</h1>
+                    <img src="3.png" class="floating-title-img img-ppa" alt="빠">
+                </div>
+                <div class="sub-title-wrapper">
+                    <img src="2.png" class="floating-title-img-small img-jji" alt="찌">
+                    <div class="sub-title" id="lobby-subtitle">가위바위보의 최강 왕을 가려라!</div>
+                </div>
             </div>
-          </div>
+
+            <!-- Interactive Rules Container -->
+            <div class="rules-container">
+                <div class="rules-col">
+                    <div class="rules-content" id="rules-text-container">
+                        <p>• 조이스틱으로 플레이어를 조종하여 밥과 상대를 잡아먹으세요!</p>
+                        <p>• 상성 관계: <b>바위 > 가위 > 보</b>. 지는 상대에게 닿으면 즉시 사망.</p>
+                        <p>• 비기는 상대끼리는 충돌 없이 서로 겹쳐서 통과하게 됩니다.</p>
+                        <p>• 사망 시 <b>바위/가위/보 중 하나를 선택해 부활</b>하며, 지정 방향으로 발사됩니다.</p>
+                        <p>• ⚡ 버튼으로 3초간 부스트 가동 (쿨타임 10초).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Number of Players -->
+            <div class="setup-section">
+                <div class="setup-label" id="label-players">플레이어 수</div>
+                <div class="grid-options" id="player-options">
+                    <button class="opt-btn" data-val="1">1</button>
+                    <button class="opt-btn" data-val="2">2</button>
+                    <button class="opt-btn" data-val="3">3</button>
+                    <button class="opt-btn active" data-val="4">4</button>
+                    <button class="opt-btn" data-val="5">5</button>
+                    <button class="opt-btn" data-val="6">6</button>
+                </div>
+            </div>
+
+            <!-- Game Mode Selection -->
+            <div class="setup-section">
+                <div class="setup-label" id="label-mode">게임 모드</div>
+                <div class="grid-options-2" id="mode-options">
+                    <button class="opt-btn active" data-val="ta-1" id="mode-btn-ta1">1분 시간제</button>
+                    <button class="opt-btn" data-val="ta-2" id="mode-btn-ta2">2분 시간제</button>
+                    <button class="opt-btn" data-val="ta-3" id="mode-btn-ta3">3분 시간제</button>
+                    <button class="opt-btn" data-val="survival" id="mode-btn-survival">서바이벌</button>
+                </div>
+            </div>
+
+            <!-- Food Density Selection -->
+            <div class="setup-section">
+                <div class="setup-label" id="label-density">밥 개수 (밀도)</div>
+                <div class="grid-options-2" id="food-density-options">
+                    <button class="opt-btn" data-val="10" id="density-btn-low">한산 (10)</button>
+                    <button class="opt-btn active" data-val="20" id="density-btn-med">적당 (20)</button>
+                    <button class="opt-btn" data-val="40" id="density-btn-high">복잡 (40)</button>
+                </div>
+            </div>
+
+            <!-- Game Speed Slider & Preview -->
+            <div class="setup-section">
+                <div class="setup-label" id="label-speed">게임 속도</div>
+                <div class="speed-control-container">
+                    <input type="range" id="speed-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                    <div class="speed-preview-wrapper">
+                        <span id="speed-label">1.0 배속</span>
+                        <div class="speed-preview-box">
+                            <div id="speed-preview-runner">
+                                <img src="2.png" alt="가위" style="width: 18px; height: 18px; object-fit: contain;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Button & external link -->
+            <button id="start-btn">대결 시작!</button>
+            <div>
+                <a href="https://킹수학.com" target="_self" class="more-games-link" id="link-more-games">더 많은 게임</a>
+            </div>
         </div>
-      </div>
-
-      <!-- Start Button & external link -->
-      <button id="start-btn">대결 시작!</button>
-      <div>
-        <a href="https://킹수학.com" target="_self" class="more-games-link" id="link-more-games">더 많은 게임</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. GAME SCREEN -->
-  <div id="game-screen" class="screen">
-    <!-- Floating Timer Badge -->
-    <div id="timer-display">00:00</div>
-
-    <!-- Centered Canvas Container -->
-    <div id="board-container">
-      <canvas id="game-canvas"></canvas>
-
-      <!-- Game Over overlay modal card (centered in game screen) -->
-      <div id="gameover-overlay" class="glass-card">
-        <h2>게임 종료</h2>
-        <table class="stats-table">
-          <thead>
-            <tr>
-              <th>순위</th>
-              <th>플레이어</th>
-              <th>이김</th>
-              <th>짐</th>
-              <th>최종 점수 (이김 - 짐)</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboard-body-overlay"></tbody>
-        </table>
-        <button class="restart-btn" id="replay-btn">다시 하기</button>
-      </div>
     </div>
 
-    <!-- Bottom Controls split into columns -->
-    <div id="control-bar"></div>
-  </div>
+    <!-- 2. GAME SCREEN -->
+    <div id="game-screen" class="screen">
+        <!-- Floating Timer Badge -->
+        <div id="timer-display">00:00</div>
 
-  <!-- Audio and Game Logic Script -->
-  <script>
-    /* =========================================================================
-       8-BIT RETRO AUDIO SYNTHESISER (Web Audio API)
-       ========================================================================= */
-    class SoundSynth {
-      constructor() {
-        this.ctx = null;
-      }
+        <!-- Centered Canvas Container -->
+        <div id="board-container">
+            <canvas id="game-canvas"></canvas>
 
-      init() {
-        if (!this.ctx) {
-          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
-      }
+            <!-- Game Over overlay modal card (centered in game screen) -->
+            <div id="gameover-overlay" class="glass-card">
+                <h2>게임 종료</h2>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>순위</th>
+                            <th>플레이어</th>
+                            <th>이김</th>
+                            <th>짐</th>
+                            <th>최종 점수 (이김 - 짐)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body-overlay"></tbody>
+                </table>
+                <button class="restart-btn" id="replay-btn">다시 하기</button>
+            </div>
+        </div>
 
-      playClick() {
-        this.init();
-        if (!this.ctx) return;
+        <!-- Bottom Controls split into columns -->
+        <div id="control-bar"></div>
+    </div>
 
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
+    <!-- Audio and Game Logic Script -->
+    <script>
+        /* =========================================================================
+           8-BIT RETRO AUDIO SYNTHESISER (Web Audio API)
+           ========================================================================= */
+        class SoundSynth {
+            constructor() {
+                this.ctx = null;
+            }
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.04);
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
 
-        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+            playClick() {
+                this.init();
+                if (!this.ctx) return;
 
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.04);
-      }
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
 
-      playEat() {
-        this.init();
-        if (!this.ctx) return;
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.04);
 
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
+                gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
 
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(261.63, now); // C4
-        osc.frequency.setValueAtTime(329.63, now + 0.05); // E4
-        osc.frequency.setValueAtTime(392.00, now + 0.1); // G4
-        osc.frequency.setValueAtTime(523.25, now + 0.15); // C5
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.04);
+            }
 
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.22);
+            playEat() {
+                this.init();
+                if (!this.ctx) return;
 
-        osc.start();
-        osc.stop(now + 0.22);
-      }
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
 
-      playCrash() {
-        this.init();
-        if (!this.ctx) return;
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(261.63, now); // C4
+                osc.frequency.setValueAtTime(329.63, now + 0.05); // E4
+                osc.frequency.setValueAtTime(392.00, now + 0.1); // G4
+                osc.frequency.setValueAtTime(523.25, now + 0.15); // C5
 
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.22);
 
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.linearRampToValueAtTime(30, now + 0.28);
+                osc.start();
+                osc.stop(now + 0.22);
+            }
 
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.28);
+            playCrash() {
+                this.init();
+                if (!this.ctx) return;
 
-        osc.start();
-        osc.stop(now + 0.28);
-      }
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
 
-      playRespawn() {
-        this.init();
-        if (!this.ctx) return;
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(30, now + 0.28);
 
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.28);
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.exponentialRampToValueAtTime(720, now + 0.25);
+                osc.start();
+                osc.stop(now + 0.28);
+            }
 
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.25);
+            playRespawn() {
+                this.init();
+                if (!this.ctx) return;
 
-        osc.start();
-        osc.stop(now + 0.25);
-      }
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
 
-      playGameOver() {
-        this.init();
-        if (!this.ctx) return;
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.exponentialRampToValueAtTime(720, now + 0.25);
 
-        const now = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.25);
 
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(392.00, now); // G4
-        osc.frequency.setValueAtTime(349.23, now + 0.12); // F4
-        osc.frequency.setValueAtTime(311.13, now + 0.24); // Eb4
-        osc.frequency.setValueAtTime(246.94, now + 0.36); // B3
+                osc.start();
+                osc.stop(now + 0.25);
+            }
 
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.linearRampToValueAtTime(0.001, now + 0.6);
+            playGameOver() {
+                this.init();
+                if (!this.ctx) return;
 
-        osc.start();
-        osc.stop(now + 0.6);
-      }
-    }
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
 
-    const sound = new SoundSynth();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(392.00, now); // G4
+                osc.frequency.setValueAtTime(349.23, now + 0.12); // F4
+                osc.frequency.setValueAtTime(311.13, now + 0.24); // Eb4
+                osc.frequency.setValueAtTime(246.94, now + 0.36); // B3
 
-    /* =========================================================================
-       GAME CONSTANTS & CONFIGURATION
-       ========================================================================= */
-    const PLAYER_DEFAULTS = [
-      { id: 1, color: '#ff2d55', rgb: '255, 45, 85', text: '#ffffff' }, // Neon Red
-      { id: 2, color: '#007aff', rgb: '0, 122, 255', text: '#ffffff' }, // Neon Blue
-      { id: 3, color: '#4cd964', rgb: '76, 217, 100', text: '#ffffff' }, // Neon Green
-      { id: 4, color: '#ffcc00', rgb: '255, 204, 0', text: '#000000' }, // Neon Yellow
-      { id: 5, color: '#af52de', rgb: '175, 82, 222', text: '#ffffff' }, // Neon Purple
-      { id: 6, color: '#00c7be', rgb: '0, 199, 190', text: '#000000' }  // Neon Cyan
-    ];
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.001, now + 0.6);
 
-    let GRID_COLS = 50;
-    let GRID_ROWS = 25;
-
-    /* =========================================================================
-       STATE VARIABLES
-       ========================================================================= */
-    let currentScreen = 'lobby';
-    let playerCount = 4;
-    let gameMode = 'ta-1';
-    let maxFoodCount = 20; // 밥 기본 개수
-    let gameSpeedMultiplier = 1.0; // 기본 게임 속도 배율
-    let currentLang = 'ko'; // 다국어 기본 상태 (ko / en)
-
-    // 다국어 번역 딕셔너리
-    const translations = {
-      ko: {
-        title: "가위바위보킹",
-        subtitle: "가위바위보의 최강 왕을 가려라!",
-        rulesTitle: "게임 규칙",
-        rules: [
-          "• 조이스틱으로 플레이어를 조종하여 밥과 상대를 잡아먹으세요!",
-          "• 상성 관계: <b>바위 > 가위 > 보</b>. 지는 상대에게 닿으면 즉시 사망.",
-          "• 비기는 상대끼리는 충돌 없이 서로 겹쳐서 통과하게 됩니다.",
-          "• 사망 시 <b>바위/가위/보 중 하나를 선택해 부활</b>하며, 지정 방향으로 발사됩니다.",
-          "• ⚡ 버튼으로 3초간 부스트 가동 (쿨타임 10초)."
-        ],
-        playersCount: "플레이어 수",
-        gameMode: "게임 모드",
-        time1m: "1분 시간제",
-        time2m: "2분 시간제",
-        time3m: "3분 시간제",
-        survival: "서바이벌",
-        foodDensity: "밥 개수 (밀도)",
-        densityLow: "한산 (10)",
-        densityMed: "적당 (20)",
-        densityHigh: "복잡 (40)",
-        gameSpeed: "게임 속도",
-        speedLabel: "배속",
-        startBtn: "대결 시작!",
-        moreGames: "더 많은 게임",
-        rejoinTitle: "부활 속성 선택",
-        muk: "바위",
-        jji: "가위",
-        ppa: "보",
-        respawnWait: "부활 대기중...",
-        gameOver: "게임 종료",
-        rank: "순위",
-        player: "플레이어",
-        wins: "이김",
-        losses: "짐",
-        score: "최종 점수 (이김 - 짐)",
-        replay: "다시 하기",
-        scoreDisplay: "이김: {w} / 짐: {l}",
-        jointRank: "공동 {r}등"
-      },
-      en: {
-        title: "RPS King",
-        subtitle: "Prove you are the Rock-Paper-Scissors King!",
-        rulesTitle: "Game Rules",
-        rules: [
-          "• Use the joystick to control your player and eat pellets & opponents!",
-          "• Relationship: <b>Rock > Scissors > Paper</b>. Touch a defeating target to die.",
-          "• Identical states pass through each other without colliding.",
-          "• On death, choose <b>Rock/Scissors/Paper to respawn</b> and launch.",
-          "• Press ⚡ to boost speed for 3s (10s cooldown)."
-        ],
-        playersCount: "Players Count",
-        gameMode: "Game Mode",
-        time1m: "Time 1M",
-        time2m: "Time 2M",
-        time3m: "Time 3M",
-        survival: "Survival",
-        foodDensity: "Food Density",
-        densityLow: "Sparse (10)",
-        densityMed: "Normal (20)",
-        densityHigh: "Dense (40)",
-        gameSpeed: "Game Speed",
-        speedLabel: "speed",
-        startBtn: "Battle Start!",
-        moreGames: "More Games",
-        rejoinTitle: "Select Respawn State",
-        muk: "Rock",
-        jji: "Scissors",
-        ppa: "Paper",
-        respawnWait: "Respawning...",
-        gameOver: "Battle Over",
-        rank: "Rank",
-        player: "Player",
-        wins: "Wins",
-        losses: "Losses",
-        score: "Final Score (Wins - Losses)",
-        replay: "Replay",
-        scoreDisplay: "Wins: {w} / Losses: {l}",
-        jointRank: "Joint {r}"
-      }
-    };
-
-    let canvas, ctx;
-    let animationFrameId;
-    let lastTime = 0;
-
-    let timerDuration = 60;
-    let timeRemaining = 60;
-    let timerInterval = null;
-
-    let snakes = []; // Player cells
-    let fruits = []; // Floating food pellets
-
-    let firstPlaceCell = null;
-    let lastPlaceCell = null;
-
-    const BASE_FOOD_SPEED = 0.6;
-
-    // 가위바위보 이미지 로딩
-    const rpsImages = {
-      1: new Image(),
-      2: new Image(),
-      3: new Image()
-    };
-    rpsImages[1].src = '1.png';
-    rpsImages[2].src = '2.png';
-    rpsImages[3].src = '3.png';
-
-    /* =========================================================================
-       DOM ELEMENTS & MENU CONTROLS
-       ========================================================================= */
-    document.addEventListener('DOMContentLoaded', () => {
-      canvas = document.getElementById('game-canvas');
-      ctx = canvas.getContext('2d');
-
-      window.addEventListener('resize', resizeCanvas);
-
-      setupLobbyOptions('player-options', (val) => {
-        playerCount = parseInt(val);
-      });
-
-      setupLobbyOptions('mode-options', (val) => {
-        gameMode = val;
-      });
-
-      // 밥 개수(밀도) 옵션 바인딩
-      setupLobbyOptions('food-density-options', (val) => {
-        maxFoodCount = parseInt(val);
-      });
-
-      // 속도 게이지 바인딩 및 프리뷰 연동
-      const speedSlider = document.getElementById('speed-slider');
-      const speedLabel = document.getElementById('speed-label');
-      const previewRunner = document.getElementById('speed-preview-runner');
-
-      if (speedSlider && speedLabel && previewRunner) {
-        speedSlider.addEventListener('input', () => {
-          gameSpeedMultiplier = parseFloat(speedSlider.value);
-          const t = translations[currentLang];
-          speedLabel.textContent = `${gameSpeedMultiplier.toFixed(1)} ${t ? t.speedLabel : '배속'}`;
-
-          // 애니메이션 속도 비례 제어 (1.0배속일 때 2s, 배속에 반비례)
-          const duration = 2.0 / gameSpeedMultiplier;
-          previewRunner.style.animationDuration = `${duration}s`;
-        });
-      }
-
-      document.getElementById('start-btn').addEventListener('click', () => {
-        sound.init();
-        sound.playClick();
-        startGame();
-      });
-
-      document.getElementById('home-btn').addEventListener('click', () => {
-        sound.playClick();
-        switchScreen('lobby');
-      });
-
-      document.getElementById('fullscreen-btn').addEventListener('click', () => {
-        sound.playClick();
-        toggleFullscreen();
-      });
-
-      // Replay button bound inside overlay
-      document.getElementById('replay-btn').addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        sound.playClick();
-        document.getElementById('gameover-overlay').style.display = 'none';
-        startGame();
-      });
-
-      // 다국어 선택기 이벤트 바인딩
-      const koBtn = document.getElementById('lang-ko-btn');
-      const enBtn = document.getElementById('lang-en-btn');
-      
-      if (koBtn && enBtn) {
-        koBtn.addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          sound.playClick();
-          currentLang = 'ko';
-          koBtn.classList.add('active');
-          enBtn.classList.remove('active');
-          updateLanguageUI();
-        });
-
-        enBtn.addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          sound.playClick();
-          currentLang = 'en';
-          enBtn.classList.add('active');
-          koBtn.classList.remove('active');
-          updateLanguageUI();
-        });
-      }
-      
-      // 초기 언어 설정 적용
-      updateLanguageUI();
-    });
-
-    function updateLanguageUI() {
-      const t = translations[currentLang];
-      if (!t) return;
-
-      // 로비 제목 및 서브타이틀
-      const lobbyTitle = document.getElementById('lobby-title');
-      const lobbySubtitle = document.getElementById('lobby-subtitle');
-      if (lobbyTitle) lobbyTitle.textContent = t.title;
-      if (lobbySubtitle) lobbySubtitle.textContent = t.subtitle;
-
-      // 게임 규칙 리스트
-      const rulesContainer = document.getElementById('rules-text-container');
-      if (rulesContainer) {
-        rulesContainer.innerHTML = t.rules.map(r => `<p>${r}</p>`).join('');
-      }
-
-      // 옵션 섹션 레이블
-      const labelPlayers = document.getElementById('label-players');
-      const labelMode = document.getElementById('label-mode');
-      const labelDensity = document.getElementById('label-density');
-      const labelSpeed = document.getElementById('label-speed');
-      if (labelPlayers) labelPlayers.textContent = t.playersCount;
-      if (labelMode) labelMode.textContent = t.gameMode;
-      if (labelDensity) labelDensity.textContent = t.foodDensity;
-      if (labelSpeed) labelSpeed.textContent = t.gameSpeed;
-
-      // 게임 모드 선택 옵션 텍스트 개별 변경
-      const m1 = document.getElementById('mode-btn-ta1');
-      const m2 = document.getElementById('mode-btn-ta2');
-      const m3 = document.getElementById('mode-btn-ta3');
-      const ms = document.getElementById('mode-btn-survival');
-      if (m1) m1.textContent = t.time1m;
-      if (m2) m2.textContent = t.time2m;
-      if (m3) m3.textContent = t.time3m;
-      if (ms) ms.textContent = t.survival;
-
-      // 밥 개수 (밀도) 옵션 텍스트 개별 변경
-      const d1 = document.getElementById('density-btn-low');
-      const d2 = document.getElementById('density-btn-med');
-      const d3 = document.getElementById('density-btn-high');
-      if (d1) d1.textContent = t.densityLow;
-      if (d2) d2.textContent = t.densityMed;
-      if (d3) d3.textContent = t.densityHigh;
-
-      // 속도 조절 슬라이더의 텍스트 배율 표시 변경
-      const speedLabel = document.getElementById('speed-label');
-      if (speedLabel) {
-        speedLabel.textContent = `${gameSpeedMultiplier.toFixed(1)} ${t.speedLabel}`;
-      }
-
-      // 시작 버튼 & 더 많은 게임 링크
-      const startBtn = document.getElementById('start-btn');
-      const moreGamesLink = document.getElementById('link-more-games');
-      if (startBtn) startBtn.textContent = t.startBtn;
-      if (moreGamesLink) moreGamesLink.textContent = t.moreGames;
-
-      // 게임오버 오버레이 다국어 헤더 변경
-      const goOverlay = document.getElementById('gameover-overlay');
-      if (goOverlay) {
-        const h2 = goOverlay.querySelector('h2');
-        if (h2) h2.textContent = t.gameOver;
-
-        const ths = goOverlay.querySelectorAll('thead th');
-        if (ths.length >= 5) {
-          ths[0].textContent = t.rank;
-          ths[1].textContent = t.player;
-          ths[2].textContent = t.wins;
-          ths[3].textContent = t.losses;
-          ths[4].textContent = t.score;
+                osc.start();
+                osc.stop(now + 0.6);
+            }
         }
 
-        const replayBtn = document.getElementById('replay-btn');
-        if (replayBtn) replayBtn.textContent = t.replay;
-      }
+        const sound = new SoundSynth();
 
-      // 인게임 하단 조작기 및 대기열 실시간 번역 연동
-      const ctrlBar = document.getElementById('control-bar');
-      if (ctrlBar && ctrlBar.children.length > 0) {
-        for (let i = 1; i <= playerCount; i++) {
-          const col = document.getElementById(`ctrl-col-p${i}`);
-          if (!col) continue;
+        /* =========================================================================
+           GAME CONSTANTS & CONFIGURATION
+           ========================================================================= */
+        const PLAYER_DEFAULTS = [
+            { id: 1, color: '#ff2d55', rgb: '255, 45, 85', text: '#ffffff' }, // Neon Red
+            { id: 2, color: '#007aff', rgb: '0, 122, 255', text: '#ffffff' }, // Neon Blue
+            { id: 3, color: '#4cd964', rgb: '76, 217, 100', text: '#ffffff' }, // Neon Green
+            { id: 4, color: '#ffcc00', rgb: '255, 204, 0', text: '#000000' }, // Neon Yellow
+            { id: 5, color: '#af52de', rgb: '175, 82, 222', text: '#ffffff' }, // Neon Purple
+            { id: 6, color: '#00c7be', rgb: '0, 199, 190', text: '#000000' }  // Neon Cyan
+        ];
 
-          // 플레이어 헤더
-          const headerSpan = col.querySelector('.control-header span:first-child');
-          if (headerSpan) {
-            headerSpan.textContent = currentLang === 'ko' ? `플레이어 ${i}` : `Player ${i}`;
-          }
+        let GRID_COLS = 50;
+        let GRID_ROWS = 25;
 
-          // 스탯 텍스트 실시간 반영
-          const cell = snakes.find(s => s.id === i);
-          if (cell) {
+        /* =========================================================================
+           STATE VARIABLES
+           ========================================================================= */
+        let currentScreen = 'lobby';
+        let playerCount = 4;
+        let gameMode = 'ta-1';
+        let maxFoodCount = 20; // 밥 기본 개수
+        let gameSpeedMultiplier = 1.0; // 기본 게임 속도 배율
+        let currentLang = 'ko'; // 다국어 기본 상태 (ko / en)
+
+        // 다국어 번역 딕셔너리
+        const translations = {
+            ko: {
+                title: "가위바위보킹",
+                subtitle: "가위바위보의 최강 왕을 가려라!",
+                rulesTitle: "게임 규칙",
+                rules: [
+                    "• 조이스틱으로 플레이어를 조종하여 밥과 상대를 잡아먹으세요!",
+                    "• 상성 관계: <b>바위 > 가위 > 보</b>. 지는 상대에게 닿으면 즉시 사망.",
+                    "• 비기는 상대끼리는 충돌 없이 서로 겹쳐서 통과하게 됩니다.",
+                    "• 사망 시 <b>바위/가위/보 중 하나를 선택해 부활</b>하며, 지정 방향으로 발사됩니다.",
+                    "• ⚡ 버튼으로 3초간 부스트 가동 (쿨타임 10초)."
+                ],
+                playersCount: "플레이어 수",
+                gameMode: "게임 모드",
+                time1m: "1분 시간제",
+                time2m: "2분 시간제",
+                time3m: "3분 시간제",
+                survival: "서바이벌",
+                foodDensity: "밥 개수 (밀도)",
+                densityLow: "한산 (10)",
+                densityMed: "적당 (20)",
+                densityHigh: "복잡 (40)",
+                gameSpeed: "게임 속도",
+                speedLabel: "배속",
+                startBtn: "대결 시작!",
+                moreGames: "더 많은 게임",
+                rejoinTitle: "부활 속성 선택",
+                muk: "바위",
+                jji: "가위",
+                ppa: "보",
+                respawnWait: "부활 대기중...",
+                gameOver: "게임 종료",
+                rank: "순위",
+                player: "플레이어",
+                wins: "이김",
+                losses: "짐",
+                score: "최종 점수 (이김 - 짐)",
+                replay: "다시 하기",
+                scoreDisplay: "이김: {w} / 짐: {l}",
+                jointRank: "공동 {r}등"
+            },
+            en: {
+                title: "RPS King",
+                subtitle: "Prove you are the Rock-Paper-Scissors King!",
+                rulesTitle: "Game Rules",
+                rules: [
+                    "• Use the joystick to control your player and eat pellets & opponents!",
+                    "• Relationship: <b>Rock > Scissors > Paper</b>. Touch a defeating target to die.",
+                    "• Identical states pass through each other without colliding.",
+                    "• On death, choose <b>Rock/Scissors/Paper to respawn</b> and launch.",
+                    "• Press ⚡ to boost speed for 3s (10s cooldown)."
+                ],
+                playersCount: "Players Count",
+                gameMode: "Game Mode",
+                time1m: "Time 1M",
+                time2m: "Time 2M",
+                time3m: "Time 3M",
+                survival: "Survival",
+                foodDensity: "Food Density",
+                densityLow: "Sparse (10)",
+                densityMed: "Normal (20)",
+                densityHigh: "Dense (40)",
+                gameSpeed: "Game Speed",
+                speedLabel: "speed",
+                startBtn: "Battle Start!",
+                moreGames: "More Games",
+                rejoinTitle: "Select Respawn State",
+                muk: "Rock",
+                jji: "Scissors",
+                ppa: "Paper",
+                respawnWait: "Respawning...",
+                gameOver: "Battle Over",
+                rank: "Rank",
+                player: "Player",
+                wins: "Wins",
+                losses: "Losses",
+                score: "Final Score (Wins - Losses)",
+                replay: "Replay",
+                scoreDisplay: "Wins: {w} / Losses: {l}",
+                jointRank: "Joint {r}"
+            }
+        };
+
+        let canvas, ctx;
+        let animationFrameId;
+        let lastTime = 0;
+
+        let timerDuration = 60;
+        let timeRemaining = 60;
+        let timerInterval = null;
+
+        let snakes = []; // Player cells
+        let fruits = []; // Floating food pellets
+
+        let firstPlaceCell = null;
+        let lastPlaceCell = null;
+
+        const BASE_FOOD_SPEED = 0.6;
+
+        // 가위바위보 이미지 로딩
+        const rpsImages = {
+            1: new Image(),
+            2: new Image(),
+            3: new Image()
+        };
+        rpsImages[1].src = '1.png';
+        rpsImages[2].src = '2.png';
+        rpsImages[3].src = '3.png';
+
+        /* =========================================================================
+           DOM ELEMENTS & MENU CONTROLS
+           ========================================================================= */
+        document.addEventListener('DOMContentLoaded', () => {
+            canvas = document.getElementById('game-canvas');
+            ctx = canvas.getContext('2d');
+
+            window.addEventListener('resize', resizeCanvas);
+
+            setupLobbyOptions('player-options', (val) => {
+                playerCount = parseInt(val);
+            });
+
+            setupLobbyOptions('mode-options', (val) => {
+                gameMode = val;
+            });
+
+            // 밥 개수(밀도) 옵션 바인딩
+            setupLobbyOptions('food-density-options', (val) => {
+                maxFoodCount = parseInt(val);
+            });
+
+            // 속도 게이지 바인딩 및 프리뷰 연동
+            const speedSlider = document.getElementById('speed-slider');
+            const speedLabel = document.getElementById('speed-label');
+            const previewRunner = document.getElementById('speed-preview-runner');
+
+            if (speedSlider && speedLabel && previewRunner) {
+                speedSlider.addEventListener('input', () => {
+                    gameSpeedMultiplier = parseFloat(speedSlider.value);
+                    const t = translations[currentLang];
+                    speedLabel.textContent = `${gameSpeedMultiplier.toFixed(1)} ${t ? t.speedLabel : '배속'}`;
+
+                    // 애니메이션 속도 비례 제어 (1.0배속일 때 2s, 배속에 반비례)
+                    const duration = 2.0 / gameSpeedMultiplier;
+                    previewRunner.style.animationDuration = `${duration}s`;
+                });
+            }
+
+            document.getElementById('start-btn').addEventListener('click', () => {
+                sound.init();
+                sound.playClick();
+                startGame();
+            });
+
+            document.getElementById('home-btn').addEventListener('click', () => {
+                sound.playClick();
+                switchScreen('lobby');
+            });
+
+            document.getElementById('fullscreen-btn').addEventListener('click', () => {
+                sound.playClick();
+                toggleFullscreen();
+            });
+
+            // Replay button bound inside overlay
+            document.getElementById('replay-btn').addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                sound.playClick();
+                document.getElementById('gameover-overlay').style.display = 'none';
+                startGame();
+            });
+
+            // 다국어 선택기 이벤트 바인딩
+            const koBtn = document.getElementById('lang-ko-btn');
+            const enBtn = document.getElementById('lang-en-btn');
+
+            if (koBtn && enBtn) {
+                koBtn.addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    sound.playClick();
+                    currentLang = 'ko';
+                    koBtn.classList.add('active');
+                    enBtn.classList.remove('active');
+                    updateLanguageUI();
+                });
+
+                enBtn.addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    sound.playClick();
+                    currentLang = 'en';
+                    enBtn.classList.add('active');
+                    koBtn.classList.remove('active');
+                    updateLanguageUI();
+                });
+            }
+
+            // 초기 언어 설정 적용
+            updateLanguageUI();
+        });
+
+        function updateLanguageUI() {
+            const t = translations[currentLang];
+            if (!t) return;
+
+            // 로비 제목 및 서브타이틀
+            const lobbyTitle = document.getElementById('lobby-title');
+            const lobbySubtitle = document.getElementById('lobby-subtitle');
+            if (lobbyTitle) lobbyTitle.textContent = t.title;
+            if (lobbySubtitle) lobbySubtitle.textContent = t.subtitle;
+
+            // 게임 규칙 리스트
+            const rulesContainer = document.getElementById('rules-text-container');
+            if (rulesContainer) {
+                rulesContainer.innerHTML = t.rules.map(r => `<p>${r}</p>`).join('');
+            }
+
+            // 옵션 섹션 레이블
+            const labelPlayers = document.getElementById('label-players');
+            const labelMode = document.getElementById('label-mode');
+            const labelDensity = document.getElementById('label-density');
+            const labelSpeed = document.getElementById('label-speed');
+            if (labelPlayers) labelPlayers.textContent = t.playersCount;
+            if (labelMode) labelMode.textContent = t.gameMode;
+            if (labelDensity) labelDensity.textContent = t.foodDensity;
+            if (labelSpeed) labelSpeed.textContent = t.gameSpeed;
+
+            // 게임 모드 선택 옵션 텍스트 개별 변경
+            const m1 = document.getElementById('mode-btn-ta1');
+            const m2 = document.getElementById('mode-btn-ta2');
+            const m3 = document.getElementById('mode-btn-ta3');
+            const ms = document.getElementById('mode-btn-survival');
+            if (m1) m1.textContent = t.time1m;
+            if (m2) m2.textContent = t.time2m;
+            if (m3) m3.textContent = t.time3m;
+            if (ms) ms.textContent = t.survival;
+
+            // 밥 개수 (밀도) 옵션 텍스트 개별 변경
+            const d1 = document.getElementById('density-btn-low');
+            const d2 = document.getElementById('density-btn-med');
+            const d3 = document.getElementById('density-btn-high');
+            if (d1) d1.textContent = t.densityLow;
+            if (d2) d2.textContent = t.densityMed;
+            if (d3) d3.textContent = t.densityHigh;
+
+            // 속도 조절 슬라이더의 텍스트 배율 표시 변경
+            const speedLabel = document.getElementById('speed-label');
+            if (speedLabel) {
+                speedLabel.textContent = `${gameSpeedMultiplier.toFixed(1)} ${t.speedLabel}`;
+            }
+
+            // 시작 버튼 & 더 많은 게임 링크
+            const startBtn = document.getElementById('start-btn');
+            const moreGamesLink = document.getElementById('link-more-games');
+            if (startBtn) startBtn.textContent = t.startBtn;
+            if (moreGamesLink) moreGamesLink.textContent = t.moreGames;
+
+            // 게임오버 오버레이 다국어 헤더 변경
+            const goOverlay = document.getElementById('gameover-overlay');
+            if (goOverlay) {
+                const h2 = goOverlay.querySelector('h2');
+                if (h2) h2.textContent = t.gameOver;
+
+                const ths = goOverlay.querySelectorAll('thead th');
+                if (ths.length >= 5) {
+                    ths[0].textContent = t.rank;
+                    ths[1].textContent = t.player;
+                    ths[2].textContent = t.wins;
+                    ths[3].textContent = t.losses;
+                    ths[4].textContent = t.score;
+                }
+
+                const replayBtn = document.getElementById('replay-btn');
+                if (replayBtn) replayBtn.textContent = t.replay;
+            }
+
+            // 인게임 하단 조작기 및 대기열 실시간 번역 연동
+            const ctrlBar = document.getElementById('control-bar');
+            if (ctrlBar && ctrlBar.children.length > 0) {
+                for (let i = 1; i <= playerCount; i++) {
+                    const col = document.getElementById(`ctrl-col-p${i}`);
+                    if (!col) continue;
+
+                    // 플레이어 헤더
+                    const headerSpan = col.querySelector('.control-header span:first-child');
+                    if (headerSpan) {
+                        headerSpan.textContent = currentLang === 'ko' ? `플레이어 ${i}` : `Player ${i}`;
+                    }
+
+                    // 스탯 텍스트 실시간 반영
+                    const cell = snakes.find(s => s.id === i);
+                    if (cell) {
+                        updatePlayerStatsUI(cell);
+                    }
+
+                    // 부활 Title
+                    const rTitle = col.querySelector('.rejoin-choice-title');
+                    if (rTitle) rTitle.textContent = t.rejoinTitle;
+
+                    // 부활 버튼 이미지 alt 및 텍스트
+                    const bMuk = col.querySelector(`#rejoin-btn-muk-p${i}`);
+                    const bJji = col.querySelector(`#rejoin-btn-jji-p${i}`);
+                    const bPpa = col.querySelector(`#rejoin-btn-ppa-p${i}`);
+                    if (bMuk) {
+                        const img = bMuk.querySelector('img');
+                        const span = bMuk.querySelector('span');
+                        if (img) img.alt = t.muk;
+                        if (span) span.textContent = t.muk;
+                    }
+                    if (bJji) {
+                        const img = bJji.querySelector('img');
+                        const span = bJji.querySelector('span');
+                        if (img) img.alt = t.jji;
+                        if (span) span.textContent = t.jji;
+                    }
+                    if (bPpa) {
+                        const img = bPpa.querySelector('img');
+                        const span = bPpa.querySelector('span');
+                        if (img) img.alt = t.ppa;
+                        if (span) span.textContent = t.ppa;
+                    }
+
+                    // 부활 대기중 텍스트
+                    const rStatus = document.getElementById(`respawn-status-p${i}`);
+                    if (rStatus) {
+                        rStatus.textContent = t.respawnWait;
+                    }
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const doc = window.document;
+            const docEl = doc.documentElement;
+
+            const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+            const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+            if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                if (requestFullScreen) {
+                    requestFullScreen.call(docEl).catch(err => {
+                        console.log("Error enabling fullscreen:", err);
+                    });
+                }
+            } else {
+                if (cancelFullScreen) {
+                    cancelFullScreen.call(doc);
+                }
+            }
+        }
+
+        function setupLobbyOptions(containerId, callback) {
+            const container = document.getElementById(containerId);
+            const buttons = container.querySelectorAll('.opt-btn');
+            buttons.forEach(btn => {
+                const selectAction = (e) => {
+                    e.preventDefault();
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    sound.playClick();
+                    callback(btn.dataset.val);
+                };
+                btn.addEventListener('pointerdown', selectAction);
+            });
+        }
+
+        function switchScreen(screenId) {
+            currentScreen = screenId;
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`${screenId}-screen`).classList.add('active');
+
+            // Toggle Home button display: Hidden on lobby, visible during game
+            const homeBtn = document.getElementById('home-btn');
+            if (homeBtn) {
+                homeBtn.style.display = (screenId === 'lobby') ? 'none' : 'flex';
+            }
+
+            if (screenId === 'game') {
+                document.getElementById('gameover-overlay').style.display = 'none';
+                resizeCanvas();
+            } else {
+                cancelAnimationFrame(animationFrameId);
+                clearInterval(timerInterval);
+            }
+        }
+
+        /* =========================================================================
+           CANVAS RESIZE & SCALING FOR WIDESCREEN SUPPORT
+           ========================================================================= */
+        let cellSize = 20;
+        let boardOffsetX = 0;
+        let boardOffsetY = 0;
+        let boardWidth = 0;
+        let boardHeight = 0;
+
+        function resizeCanvas() {
+            const container = document.getElementById('board-container');
+            if (!container || container.clientWidth === 0) return;
+
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = `${w}px`;
+            canvas.style.height = `${h}px`;
+            ctx.scale(dpr, dpr);
+
+            GRID_ROWS = 25;
+            cellSize = Math.floor(h / GRID_ROWS);
+            GRID_COLS = Math.floor(w / cellSize);
+            if (GRID_COLS < 10) GRID_COLS = 10;
+
+            boardWidth = GRID_COLS * cellSize;
+            boardHeight = GRID_ROWS * cellSize;
+
+            boardOffsetX = Math.floor((w - boardWidth) / 2);
+            boardOffsetY = Math.floor((h - boardHeight) / 2);
+        }
+
+        /* =========================================================================
+           GAME INITIALISATION & TIME SETUP
+           ========================================================================= */
+        function startGame() {
+            snakes = [];
+            fruits = [];
+
+            if (gameMode.startsWith('ta-')) {
+                const mins = parseInt(gameMode.split('-')[1]);
+                timerDuration = mins * 60;
+                timeRemaining = timerDuration;
+            } else {
+                timerDuration = 99999;
+                timeRemaining = 0;
+            }
+
+            buildControlBar();
+
+            // Transition to game screen first to establish layout dimensions
+            switchScreen('game');
+
+            for (let i = 1; i <= playerCount; i++) {
+                spawnSnake(i, true);
+            }
+
+            // 밥 개수 옵션(maxFoodCount)에 맞춰 초기 밥을 골고루 분산 생성
+            for (let f = 0; f < maxFoodCount; f++) {
+                spawnInitialFruitEvenly(f);
+            }
+
+            lastTime = performance.now();
+            animationFrameId = requestAnimationFrame(gameLoop);
+
+            if (gameMode !== 'survival') {
+                updateTimerDisplay();
+                timerInterval = setInterval(() => {
+                    timeRemaining--;
+                    updateTimerDisplay();
+                    if (timeRemaining <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('timer-display').textContent = 'SURVIVAL';
+            }
+        }
+
+        function spawnSnake(playerId, firstSpawn = false, chosenType = null) {
+            const config = PLAYER_DEFAULTS[playerId - 1];
+
+            const gridX = getColumnGridCenter(playerId);
+            const spawnX = Math.floor(boardOffsetX + gridX * cellSize + cellSize / 2);
+            const spawnY = boardOffsetY + boardHeight - 80;
+            const startAngle = -Math.PI / 2;
+
+            let startingExp = 10;
+            let startingWins = 0;
+            let startingLosses = 0;
+
+            const existingIdx = snakes.findIndex(s => s.id === playerId);
+            if (existingIdx !== -1) {
+                startingWins = snakes[existingIdx].wins;
+                startingLosses = snakes[existingIdx].losses;
+                if (!firstSpawn && gameMode !== 'survival') {
+                    startingExp = Math.max(10, Math.floor(snakes[existingIdx].oldExp / 2));
+                }
+            }
+
+            // 묵찌빠 속성 설정
+            let type = chosenType;
+            if (!type) {
+                type = Math.floor(Math.random() * 3) + 1; // 1(묵), 2(찌), 3(빠)
+            }
+
+            const cell = {
+                id: playerId,
+                color: config.color,
+                rgb: config.rgb,
+                text: config.text,
+                x: spawnX,
+                y: spawnY,
+                angle: startAngle,
+                exp: startingExp,
+                maxExp: startingExp,
+                isDead: false,
+                respawnTimer: 0,
+                invulnerableTimer: 2000, // 부활 시 2초간 무적
+                oldExp: 10,
+
+                type: type, // 1, 2, 3
+                wins: startingWins,
+                losses: startingLosses,
+
+                // Steering analog inputs
+                angleOffset: 0,
+                joystickActive: false,
+                boostTimeLeft: 1200, // 부활 시 1.2초간 발사 가속
+                boostCooldownTime: 0
+            };
+
+            if (existingIdx !== -1) {
+                cell.maxExp = Math.max(snakes[existingIdx].maxExp, startingExp);
+                snakes[existingIdx] = cell;
+            } else {
+                snakes.push(cell);
+            }
+
+            sound.playRespawn();
+            hideRejoinUI(playerId);
             updatePlayerStatsUI(cell);
-          }
-
-          // 부활 Title
-          const rTitle = col.querySelector('.rejoin-choice-title');
-          if (rTitle) rTitle.textContent = t.rejoinTitle;
-
-          // 부활 버튼 이미지 alt 및 텍스트
-          const bMuk = col.querySelector(`#rejoin-btn-muk-p${i}`);
-          const bJji = col.querySelector(`#rejoin-btn-jji-p${i}`);
-          const bPpa = col.querySelector(`#rejoin-btn-ppa-p${i}`);
-          if (bMuk) {
-            const img = bMuk.querySelector('img');
-            const span = bMuk.querySelector('span');
-            if (img) img.alt = t.muk;
-            if (span) span.textContent = t.muk;
-          }
-          if (bJji) {
-            const img = bJji.querySelector('img');
-            const span = bJji.querySelector('span');
-            if (img) img.alt = t.jji;
-            if (span) span.textContent = t.jji;
-          }
-          if (bPpa) {
-            const img = bPpa.querySelector('img');
-            const span = bPpa.querySelector('span');
-            if (img) img.alt = t.ppa;
-            if (span) span.textContent = t.ppa;
-          }
-
-          // 부활 대기중 텍스트
-          const rStatus = document.getElementById(`respawn-status-p${i}`);
-          if (rStatus) {
-            rStatus.textContent = t.respawnWait;
-          }
-        }
-      }
-    }
-
-    function toggleFullscreen() {
-      const doc = window.document;
-      const docEl = doc.documentElement;
-
-      const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-      const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-      if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-        if (requestFullScreen) {
-          requestFullScreen.call(docEl).catch(err => {
-            console.log("Error enabling fullscreen:", err);
-          });
-        }
-      } else {
-        if (cancelFullScreen) {
-          cancelFullScreen.call(doc);
-        }
-      }
-    }
-
-    function setupLobbyOptions(containerId, callback) {
-      const container = document.getElementById(containerId);
-      const buttons = container.querySelectorAll('.opt-btn');
-      buttons.forEach(btn => {
-        const selectAction = (e) => {
-          e.preventDefault();
-          buttons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          sound.playClick();
-          callback(btn.dataset.val);
-        };
-        btn.addEventListener('pointerdown', selectAction);
-      });
-    }
-
-    function switchScreen(screenId) {
-      currentScreen = screenId;
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(`${screenId}-screen`).classList.add('active');
-
-      // Toggle Home button display: Hidden on lobby, visible during game
-      const homeBtn = document.getElementById('home-btn');
-      if (homeBtn) {
-        homeBtn.style.display = (screenId === 'lobby') ? 'none' : 'flex';
-      }
-
-      if (screenId === 'game') {
-        document.getElementById('gameover-overlay').style.display = 'none';
-        resizeCanvas();
-      } else {
-        cancelAnimationFrame(animationFrameId);
-        clearInterval(timerInterval);
-      }
-    }
-
-    /* =========================================================================
-       CANVAS RESIZE & SCALING FOR WIDESCREEN SUPPORT
-       ========================================================================= */
-    let cellSize = 20;
-    let boardOffsetX = 0;
-    let boardOffsetY = 0;
-    let boardWidth = 0;
-    let boardHeight = 0;
-
-    function resizeCanvas() {
-      const container = document.getElementById('board-container');
-      if (!container || container.clientWidth === 0) return;
-
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      ctx.scale(dpr, dpr);
-
-      GRID_ROWS = 25;
-      cellSize = Math.floor(h / GRID_ROWS);
-      GRID_COLS = Math.floor(w / cellSize);
-      if (GRID_COLS < 10) GRID_COLS = 10;
-
-      boardWidth = GRID_COLS * cellSize;
-      boardHeight = GRID_ROWS * cellSize;
-
-      boardOffsetX = Math.floor((w - boardWidth) / 2);
-      boardOffsetY = Math.floor((h - boardHeight) / 2);
-    }
-
-    /* =========================================================================
-       GAME INITIALISATION & TIME SETUP
-       ========================================================================= */
-    function startGame() {
-      snakes = [];
-      fruits = [];
-
-      if (gameMode.startsWith('ta-')) {
-        const mins = parseInt(gameMode.split('-')[1]);
-        timerDuration = mins * 60;
-        timeRemaining = timerDuration;
-      } else {
-        timerDuration = 99999;
-        timeRemaining = 0;
-      }
-
-      buildControlBar();
-
-      // Transition to game screen first to establish layout dimensions
-      switchScreen('game');
-
-      for (let i = 1; i <= playerCount; i++) {
-        spawnSnake(i, true);
-      }
-
-      // 밥 개수 옵션(maxFoodCount)에 맞춰 초기 밥을 골고루 분산 생성
-      for (let f = 0; f < maxFoodCount; f++) {
-        spawnInitialFruitEvenly(f);
-      }
-
-      lastTime = performance.now();
-      animationFrameId = requestAnimationFrame(gameLoop);
-
-      if (gameMode !== 'survival') {
-        updateTimerDisplay();
-        timerInterval = setInterval(() => {
-          timeRemaining--;
-          updateTimerDisplay();
-          if (timeRemaining <= 0) {
-            endGame();
-          }
-        }, 1000);
-      } else {
-        document.getElementById('timer-display').textContent = 'SURVIVAL';
-      }
-    }
-
-    function spawnSnake(playerId, firstSpawn = false, chosenType = null) {
-      const config = PLAYER_DEFAULTS[playerId - 1];
-
-      const gridX = getColumnGridCenter(playerId);
-      const spawnX = Math.floor(boardOffsetX + gridX * cellSize + cellSize / 2);
-      const spawnY = boardOffsetY + boardHeight - 80;
-      const startAngle = -Math.PI / 2;
-
-      let startingExp = 10;
-      let startingWins = 0;
-      let startingLosses = 0;
-
-      const existingIdx = snakes.findIndex(s => s.id === playerId);
-      if (existingIdx !== -1) {
-        startingWins = snakes[existingIdx].wins;
-        startingLosses = snakes[existingIdx].losses;
-        if (!firstSpawn && gameMode !== 'survival') {
-          startingExp = Math.max(10, Math.floor(snakes[existingIdx].oldExp / 2));
-        }
-      }
-
-      // 묵찌빠 속성 설정
-      let type = chosenType;
-      if (!type) {
-        type = Math.floor(Math.random() * 3) + 1; // 1(묵), 2(찌), 3(빠)
-      }
-
-      const cell = {
-        id: playerId,
-        color: config.color,
-        rgb: config.rgb,
-        text: config.text,
-        x: spawnX,
-        y: spawnY,
-        angle: startAngle,
-        exp: startingExp,
-        maxExp: startingExp,
-        isDead: false,
-        respawnTimer: 0,
-        invulnerableTimer: 2000, // 부활 시 2초간 무적
-        oldExp: 10,
-
-        type: type, // 1, 2, 3
-        wins: startingWins,
-        losses: startingLosses,
-
-        // Steering analog inputs
-        angleOffset: 0,
-        joystickActive: false,
-        boostTimeLeft: 1200, // 부활 시 1.2초간 발사 가속
-        boostCooldownTime: 0
-      };
-
-      if (existingIdx !== -1) {
-        cell.maxExp = Math.max(snakes[existingIdx].maxExp, startingExp);
-        snakes[existingIdx] = cell;
-      } else {
-        snakes.push(cell);
-      }
-
-      sound.playRespawn();
-      hideRejoinUI(playerId);
-      updatePlayerStatsUI(cell);
-      resetJoystickKnobUI(playerId);
-    }
-
-    function getColumnGridCenter(playerId) {
-      let cellX = Math.floor(((playerId - 0.5) * GRID_COLS) / playerCount);
-      if (cellX < 1) cellX = 1;
-      if (cellX >= GRID_COLS - 1) cellX = GRID_COLS - 2;
-      return cellX;
-    }
-
-    function getCellRadius(exp) {
-      return 25; // 캐릭터 크기는 고정
-    }
-
-    // 밥 생성 (가위바위보 밥)
-    function spawnInitialFruitEvenly(index) {
-      const col = index % 5;
-      const row = Math.floor(index / 5);
-
-      const allowedWidth = boardWidth;
-      const cellW = allowedWidth / 5;
-      const cellH = boardHeight / 5;
-
-      let rx = boardOffsetX + (col + 0.5) * cellW + (Math.random() - 0.5) * (cellW * 0.3);
-      let ry = boardOffsetY + (row + 0.5) * cellH + (Math.random() - 0.5) * (cellH * 0.3);
-
-      if (rx < boardOffsetX + 20) rx = boardOffsetX + 20;
-      if (rx > boardOffsetX + allowedWidth - 20) rx = boardOffsetX + allowedWidth - 20;
-      if (ry < boardOffsetY + 20) ry = boardOffsetY + 20;
-      if (ry > boardOffsetY + boardHeight - 20) ry = boardOffsetY + boardHeight - 20;
-
-      const angle = Math.random() * Math.PI * 2;
-      const speed = (0.5 + Math.random() * 0.5);
-
-      fruits.push({
-        x: rx,
-        y: ry,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        friction: 1.0,
-        value: 1, // 밥을 먹으면 1점 획득
-        radius: 18, // 가위바위보 이미지가 적당히 보이는 크기
-        type: Math.floor(Math.random() * 3) + 1, // 묵, 찌, 빠 중 랜덤
-        isStatic: true
-      });
-    }
-
-    function spawnFruit(isInitial = false) {
-      let attempts = 0;
-      let pos = null;
-      const maxXLimit = boardWidth;
-
-      while (attempts < 100) {
-        const rx = boardOffsetX + 20 + Math.random() * (maxXLimit - 40);
-        const ry = boardOffsetY + 20 + Math.random() * (boardHeight - 40);
-
-        let overlaps = false;
-        for (const s of snakes) {
-          if (s.isDead) continue;
-          const dist = Math.sqrt((s.x - rx) * (s.x - rx) + (s.y - ry) * (s.y - ry));
-          if (dist < getCellRadius(s.exp) + 15) {
-            overlaps = true;
-            break;
-          }
+            resetJoystickKnobUI(playerId);
         }
 
-        if (!overlaps) {
-          pos = { x: rx, y: ry };
-          break;
+        function getColumnGridCenter(playerId) {
+            let cellX = Math.floor(((playerId - 0.5) * GRID_COLS) / playerCount);
+            if (cellX < 1) cellX = 1;
+            if (cellX >= GRID_COLS - 1) cellX = GRID_COLS - 2;
+            return cellX;
         }
-        attempts++;
-      }
 
-      if (!pos) {
-        pos = {
-          x: boardOffsetX + 20 + Math.random() * (maxXLimit - 40),
-          y: boardOffsetY + 20 + Math.random() * (boardHeight - 40)
-        };
-      }
+        function getCellRadius(exp) {
+            return 25; // 캐릭터 크기는 고정
+        }
 
-      const angle = Math.random() * Math.PI * 2;
-      const speed = (0.5 + Math.random() * 0.5);
+        // 밥 생성 (가위바위보 밥)
+        function spawnInitialFruitEvenly(index) {
+            const col = index % 5;
+            const row = Math.floor(index / 5);
 
-      fruits.push({
-        x: pos.x,
-        y: pos.y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        friction: 1.0,
-        value: 1,
-        radius: 18,
-        type: Math.floor(Math.random() * 3) + 1, // 묵, 찌, 빠 중 랜덤
-        isStatic: true
-      });
-    }
+            const allowedWidth = boardWidth;
+            const cellW = allowedWidth / 5;
+            const cellH = boardHeight / 5;
 
-    /* =========================================================================
-       DYNAMIC CONTROL BAR BUILDERS (1 to 6 Columns)
-       ========================================================================= */
-    function buildControlBar() {
-      const ctrlBar = document.getElementById('control-bar');
-      ctrlBar.innerHTML = '';
+            let rx = boardOffsetX + (col + 0.5) * cellW + (Math.random() - 0.5) * (cellW * 0.3);
+            let ry = boardOffsetY + (row + 0.5) * cellH + (Math.random() - 0.5) * (cellH * 0.3);
 
-      for (let i = 1; i <= playerCount; i++) {
-        const config = PLAYER_DEFAULTS[i - 1];
+            if (rx < boardOffsetX + 20) rx = boardOffsetX + 20;
+            if (rx > boardOffsetX + allowedWidth - 20) rx = boardOffsetX + allowedWidth - 20;
+            if (ry < boardOffsetY + 20) ry = boardOffsetY + 20;
+            if (ry > boardOffsetY + boardHeight - 20) ry = boardOffsetY + boardHeight - 20;
 
-        const col = document.createElement('div');
-        col.className = 'control-column glass-card';
-        col.style.border = `2px solid ${config.color}`;
-        col.style.background = `rgba(${config.rgb}, 0.03)`;
-        col.id = `ctrl-col-p${i}`;
+            const angle = Math.random() * Math.PI * 2;
+            const speed = (0.5 + Math.random() * 0.5);
 
-        const t = translations[currentLang];
-        const pName = currentLang === 'ko' ? `플레이어 ${i}` : `Player ${i}`;
-        const statTxt = currentLang === 'ko' ? `이김: 0 / 짐: 0` : `W: 0 / L: 0`;
+            fruits.push({
+                x: rx,
+                y: ry,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                friction: 1.0,
+                value: 1, // 밥을 먹으면 1점 획득
+                radius: 18, // 가위바위보 이미지가 적당히 보이는 크기
+                type: Math.floor(Math.random() * 3) + 1, // 묵, 찌, 빠 중 랜덤
+                isStatic: true
+            });
+        }
 
-        const header = document.createElement('div');
-        header.className = 'control-header';
-        header.style.color = config.color;
-        header.innerHTML = `
+        function spawnFruit(isInitial = false) {
+            let attempts = 0;
+            let pos = null;
+            const maxXLimit = boardWidth;
+
+            while (attempts < 100) {
+                const rx = boardOffsetX + 20 + Math.random() * (maxXLimit - 40);
+                const ry = boardOffsetY + 20 + Math.random() * (boardHeight - 40);
+
+                let overlaps = false;
+                for (const s of snakes) {
+                    if (s.isDead) continue;
+                    const dist = Math.sqrt((s.x - rx) * (s.x - rx) + (s.y - ry) * (s.y - ry));
+                    if (dist < getCellRadius(s.exp) + 15) {
+                        overlaps = true;
+                        break;
+                    }
+                }
+
+                if (!overlaps) {
+                    pos = { x: rx, y: ry };
+                    break;
+                }
+                attempts++;
+            }
+
+            if (!pos) {
+                pos = {
+                    x: boardOffsetX + 20 + Math.random() * (maxXLimit - 40),
+                    y: boardOffsetY + 20 + Math.random() * (boardHeight - 40)
+                };
+            }
+
+            const angle = Math.random() * Math.PI * 2;
+            const speed = (0.5 + Math.random() * 0.5);
+
+            fruits.push({
+                x: pos.x,
+                y: pos.y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                friction: 1.0,
+                value: 1,
+                radius: 18,
+                type: Math.floor(Math.random() * 3) + 1, // 묵, 찌, 빠 중 랜덤
+                isStatic: true
+            });
+        }
+
+        /* =========================================================================
+           DYNAMIC CONTROL BAR BUILDERS (1 to 6 Columns)
+           ========================================================================= */
+        function buildControlBar() {
+            const ctrlBar = document.getElementById('control-bar');
+            ctrlBar.innerHTML = '';
+
+            for (let i = 1; i <= playerCount; i++) {
+                const config = PLAYER_DEFAULTS[i - 1];
+
+                const col = document.createElement('div');
+                col.className = 'control-column glass-card';
+                col.style.border = `2px solid ${config.color}`;
+                col.style.background = `rgba(${config.rgb}, 0.03)`;
+                col.id = `ctrl-col-p${i}`;
+
+                const t = translations[currentLang];
+                const pName = currentLang === 'ko' ? `플레이어 ${i}` : `Player ${i}`;
+                const statTxt = currentLang === 'ko' ? `이김: 0 / 짐: 0` : `W: 0 / L: 0`;
+
+                const header = document.createElement('div');
+                header.className = 'control-header';
+                header.style.color = config.color;
+                header.innerHTML = `
           <span>${pName}</span>
           <span id="ctrl-stats-p${i}">${statTxt}</span>
         `;
-        col.appendChild(header);
+                col.appendChild(header);
 
-        const body = document.createElement('div');
-        body.className = 'control-body';
+                const body = document.createElement('div');
+                body.className = 'control-body';
 
-        const joyContainer = document.createElement('div');
-        joyContainer.className = 'joystick-container';
-        joyContainer.id = `joy-container-p${i}`;
-        joyContainer.style.setProperty('--p-color', config.color);
-        joyContainer.style.setProperty('--p-rgb', config.rgb);
+                const joyContainer = document.createElement('div');
+                joyContainer.className = 'joystick-container';
+                joyContainer.id = `joy-container-p${i}`;
+                joyContainer.style.setProperty('--p-color', config.color);
+                joyContainer.style.setProperty('--p-rgb', config.rgb);
 
-        const joyKnobDiv = document.createElement('div');
-        joyKnobDiv.className = 'joystick-knob';
-        joyKnobDiv.id = `joy-knob-p${i}`;
-        joyKnobDiv.style.backgroundColor = config.color;
-        joyKnobDiv.style.boxShadow = `0 0 15px ${config.color}`;
+                const joyKnobDiv = document.createElement('div');
+                joyKnobDiv.className = 'joystick-knob';
+                joyKnobDiv.id = `joy-knob-p${i}`;
+                joyKnobDiv.style.backgroundColor = config.color;
+                joyKnobDiv.style.boxShadow = `0 0 15px ${config.color}`;
 
-        joyContainer.appendChild(joyKnobDiv);
+                joyContainer.appendChild(joyKnobDiv);
 
-        const boostBtnWrapper = document.createElement('div');
-        boostBtnWrapper.className = 'boost-btn-wrapper';
+                const boostBtnWrapper = document.createElement('div');
+                boostBtnWrapper.className = 'boost-btn-wrapper';
 
-        const boostBtn = document.createElement('button');
-        boostBtn.className = 'boost-btn';
-        boostBtn.id = `boost-btn-p${i}`;
-        boostBtn.style.setProperty('--p-color', config.color);
-        boostBtn.style.setProperty('--p-rgb', config.rgb);
-        boostBtn.innerHTML = `
+                const boostBtn = document.createElement('button');
+                boostBtn.className = 'boost-btn';
+                boostBtn.id = `boost-btn-p${i}`;
+                boostBtn.style.setProperty('--p-color', config.color);
+                boostBtn.style.setProperty('--p-rgb', config.rgb);
+                boostBtn.innerHTML = `
           <svg class="cooldown-ring" width="64" height="64">
             <circle class="ring-bg" cx="30" cy="30" r="26"></circle>
             <circle class="ring-progress" id="ring-progress-p${i}" cx="30" cy="30" r="26" style="stroke: ${config.color}"></circle>
@@ -1865,18 +1870,18 @@
           <span class="cooldown-text" id="boost-timer-p${i}"></span>
         `;
 
-        boostBtnWrapper.appendChild(boostBtn);
-        body.appendChild(joyContainer);
-        body.appendChild(boostBtnWrapper);
-        col.appendChild(body);
+                boostBtnWrapper.appendChild(boostBtn);
+                body.appendChild(joyContainer);
+                body.appendChild(boostBtnWrapper);
+                col.appendChild(body);
 
-        const rejoinDiv = document.createElement('div');
-        rejoinDiv.className = 'rejoin-container';
-        rejoinDiv.id = `rejoin-container-p${i}`;
-        rejoinDiv.style.setProperty('--p-color', config.color);
-        rejoinDiv.style.setProperty('--p-rgb', config.rgb);
+                const rejoinDiv = document.createElement('div');
+                rejoinDiv.className = 'rejoin-container';
+                rejoinDiv.id = `rejoin-container-p${i}`;
+                rejoinDiv.style.setProperty('--p-color', config.color);
+                rejoinDiv.style.setProperty('--p-rgb', config.rgb);
 
-        rejoinDiv.innerHTML = `
+                rejoinDiv.innerHTML = `
           <div class="rejoin-choice-title">${t.rejoinTitle}</div>
           <div class="rejoin-choice-container">
             <button class="rejoin-choice-btn" id="rejoin-btn-muk-p${i}" style="--p-color: ${config.color}; --p-rgb: ${config.rgb}">
@@ -1894,667 +1899,705 @@
           </div>
         `;
 
-        col.appendChild(rejoinDiv);
+                col.appendChild(rejoinDiv);
 
-        // 부활 버튼 이벤트 바인딩
-        rejoinDiv.querySelector(`#rejoin-btn-muk-p${i}`).addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          sound.playClick();
-          spawnSnake(i, false, 1);
-        });
-        rejoinDiv.querySelector(`#rejoin-btn-jji-p${i}`).addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          sound.playClick();
-          spawnSnake(i, false, 2);
-        });
-        rejoinDiv.querySelector(`#rejoin-btn-ppa-p${i}`).addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          sound.playClick();
-          spawnSnake(i, false, 3);
-        });
+                // 부활 버튼 이벤트 바인딩
+                rejoinDiv.querySelector(`#rejoin-btn-muk-p${i}`).addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    sound.playClick();
+                    spawnSnake(i, false, 1);
+                });
+                rejoinDiv.querySelector(`#rejoin-btn-jji-p${i}`).addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    sound.playClick();
+                    spawnSnake(i, false, 2);
+                });
+                rejoinDiv.querySelector(`#rejoin-btn-ppa-p${i}`).addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    sound.playClick();
+                    spawnSnake(i, false, 3);
+                });
 
-        const respawnStatus = document.createElement('div');
-        respawnStatus.className = 'respawn-status';
-        respawnStatus.id = `respawn-status-p${i}`;
-        respawnStatus.style.setProperty('--p-color', config.color);
-        respawnStatus.style.setProperty('--p-rgb', config.rgb);
-        respawnStatus.textContent = t.respawnWait;
-        col.appendChild(respawnStatus);
+                const respawnStatus = document.createElement('div');
+                respawnStatus.className = 'respawn-status';
+                respawnStatus.id = `respawn-status-p${i}`;
+                respawnStatus.style.setProperty('--p-color', config.color);
+                respawnStatus.style.setProperty('--p-rgb', config.rgb);
+                respawnStatus.textContent = t.respawnWait;
+                col.appendChild(respawnStatus);
 
-        ctrlBar.appendChild(col);
+                ctrlBar.appendChild(col);
 
-        setupJoystickEvents(i, joyContainer, joyKnobDiv);
+                setupJoystickEvents(i, joyContainer, joyKnobDiv);
 
-        boostBtn.addEventListener('pointerdown', (e) => {
-          e.preventDefault();
-          triggerBoost(i);
-        });
-      }
-    }
-
-    function setupJoystickEvents(playerId, container, knob) {
-      let active = false;
-      let pointerId = null;
-
-      container.addEventListener('pointerdown', (e) => {
-        e.preventDefault();
-        sound.init();
-        active = true;
-        pointerId = e.pointerId;
-        container.setPointerCapture(e.pointerId);
-        updateJoystickDrag(e, playerId, container, knob);
-      });
-
-      container.addEventListener('pointermove', (e) => {
-        if (active && e.pointerId === pointerId) {
-          e.preventDefault();
-          updateJoystickDrag(e, playerId, container, knob);
-        }
-      });
-
-      const stopDrag = (e) => {
-        if (active && e.pointerId === pointerId) {
-          e.preventDefault();
-          active = false;
-          pointerId = null;
-          knob.style.transform = 'translate(0px, 0px)';
-
-          const cell = snakes.find(s => s.id === playerId);
-          if (cell) {
-            cell.joystickActive = false;
-          }
-        }
-      };
-
-      container.addEventListener('pointerup', stopDrag);
-      container.addEventListener('pointercancel', stopDrag);
-      container.addEventListener('pointerleave', stopDrag);
-    }
-
-    function updateJoystickDrag(e, playerId, container, knob) {
-      const rect = container.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      let dx = e.clientX - centerX;
-      let dy = e.clientY - centerY;
-
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const maxDrag = rect.width / 2 - 8;
-
-      const angle = Math.atan2(dy, dx);
-
-      let knobX = dx;
-      let knobY = dy;
-      if (dist > maxDrag) {
-        knobX = Math.cos(angle) * maxDrag;
-        knobY = Math.sin(angle) * maxDrag;
-      }
-
-      knob.style.transform = `translate(${knobX}px, ${knobY}px)`;
-
-      const cell = snakes.find(s => s.id === playerId);
-      if (cell && !cell.isDead) {
-        cell.angle = angle;
-        cell.joystickActive = true;
-      }
-    }
-
-    function resetJoystickKnobUI(playerId) {
-      const knob = document.getElementById(`joy-knob-p${playerId}`);
-      if (knob) knob.style.transform = 'translate(0px, 0px)';
-    }
-
-    function triggerBoost(playerId) {
-      const cell = snakes.find(s => s.id === playerId);
-      if (!cell || cell.isDead) return;
-
-      if (cell.boostCooldownTime <= 0) {
-        cell.boostTimeLeft = 3000;
-        cell.boostCooldownTime = 10000;
-        sound.playClick();
-      }
-    }
-
-    function updatePlayerStatsUI(s) {
-      const statsSpan = document.getElementById(`ctrl-stats-p${s.id}`);
-      if (statsSpan) {
-        const t = translations[currentLang];
-        statsSpan.textContent = t.scoreDisplay.replace('{w}', s.wins).replace('{l}', s.losses);
-      }
-    }
-
-    function updateTimerDisplay() {
-      const mins = Math.floor(timeRemaining / 60);
-      const secs = timeRemaining % 60;
-      const strMins = String(mins).padStart(2, '0');
-      const strSecs = String(secs).padStart(2, '0');
-      document.getElementById('timer-display').textContent = `${strMins}:${strSecs}`;
-    }
-
-    function showRejoinUI(playerId) {
-      const rejoinDiv = document.getElementById(`rejoin-container-p${playerId}`);
-      if (rejoinDiv) rejoinDiv.style.display = 'flex';
-    }
-
-    function hideRejoinUI(playerId) {
-      const rejoinDiv = document.getElementById(`rejoin-container-p${playerId}`);
-      if (rejoinDiv) rejoinDiv.style.display = 'none';
-
-      const respawnStatus = document.getElementById(`respawn-status-p${playerId}`);
-      if (respawnStatus) respawnStatus.style.display = 'none';
-    }
-
-    function showRespawnTimerUI(playerId) {
-      // 자동 부활을 사용하지 않고 묵찌빠 선택 부활을 사용하므로 비워둡니다.
-    }
-
-    /* =========================================================================
-       CORE GAME LOOP (60FPS DELTA TIME DRIVEN)
-       ========================================================================= */
-    function gameLoop(time) {
-      animationFrameId = requestAnimationFrame(gameLoop);
-
-      if (!lastTime) lastTime = time;
-      let dt = time - lastTime;
-      lastTime = time;
-
-      if (dt > 100) dt = 100;
-
-      updateGame(dt);
-      renderGame();
-    }
-
-    /* =========================================================================
-       GAME STATE UPDATES (MOVEMENT, COLLISIONS, EAT LOGIC)
-       ========================================================================= */
-    function updateGame(dt) {
-      // 1. Determine Underdog Tags
-      const aliveCells = snakes.filter(s => !s.isDead);
-      if (aliveCells.length >= 2) {
-        const sorted = [...aliveCells].sort((a, b) => b.exp - a.exp);
-        firstPlaceCell = sorted[0];
-        lastPlaceCell = sorted[sorted.length - 1];
-
-        if (firstPlaceCell.exp === lastPlaceCell.exp) {
-          firstPlaceCell = null;
-          lastPlaceCell = null;
-        }
-      } else {
-        firstPlaceCell = null;
-        lastPlaceCell = null;
-      }
-
-      // 2. Process Booster Cooldown indicators (자동 부활 삭제, 선택 부활만 사용)
-      for (const s of snakes) {
-        if (!s.isDead && s.invulnerableTimer > 0) {
-          s.invulnerableTimer -= dt;
-        }
-
-        if (s.boostTimeLeft > 0) {
-          s.boostTimeLeft -= dt;
-          if (s.boostTimeLeft < 0) s.boostTimeLeft = 0;
-        }
-        if (s.boostCooldownTime > 0) {
-          s.boostCooldownTime -= dt;
-          if (s.boostCooldownTime < 0) s.boostCooldownTime = 0;
-        }
-
-        updateBoosterUI(s);
-      }
-
-      // 3. Smooth Analog Movement (속도 조절 gameSpeedMultiplier 연동)
-      for (const s of snakes) {
-        if (s.isDead) continue;
-
-        let speedMultiplier = 1.0;
-        if (s.boostTimeLeft > 0) {
-          speedMultiplier = 1.7;
-        }
-
-        const baseSpeed = Math.max(1.2, 3.2 - 0.15 * Math.log2(s.exp));
-        const speed = baseSpeed * speedMultiplier * gameSpeedMultiplier;
-
-        s.x += Math.cos(s.angle) * speed;
-        s.y += Math.sin(s.angle) * speed;
-
-        // Wall boundary containment check: DIE immediately if wall border is touched
-        const radius = getCellRadius(s.exp);
-        if (s.x - radius < boardOffsetX || s.x + radius > boardOffsetX + boardWidth ||
-          s.y - radius < boardOffsetY || s.y + radius > boardOffsetY + boardHeight) {
-          killCell(s);
-        }
-      }
-
-      // 4. Update food pellet drift physics & bounce off board borders (속도 조절 연동)
-      for (const f of fruits) {
-        if (f.vx !== undefined && f.vy !== undefined) {
-          f.x += f.vx * gameSpeedMultiplier;
-          f.y += f.vy * gameSpeedMultiplier;
-
-          // 꼼지락 꼼지락 랜덤 방향 비틀기 (속도가 빠를수록 빈도 증가 연동)
-          if (Math.random() < 0.02 * gameSpeedMultiplier) {
-            const currentSpeed = Math.sqrt(f.vx * f.vx + f.vy * f.vy);
-            const angleChange = (Math.random() - 0.5) * 0.8;
-            const newAngle = Math.atan2(f.vy, f.vx) + angleChange;
-            f.vx = Math.cos(newAngle) * currentSpeed;
-            f.vy = Math.sin(newAngle) * currentSpeed;
-          }
-
-          f.vx *= f.friction;
-          f.vy *= f.friction;
-
-          // Decelerating scattered pellets clamp at their specific mass-proportional baseline speed
-          const targetBaseSpeed = 1.0;
-          const currentSpeed = Math.sqrt(f.vx * f.vx + f.vy * f.vy);
-          if (currentSpeed < targetBaseSpeed && currentSpeed > 0.01) {
-            const angle = Math.atan2(f.vy, f.vx);
-            f.vx = Math.cos(angle) * targetBaseSpeed;
-            f.vy = Math.sin(angle) * targetBaseSpeed;
-            f.friction = 1.0;
-          }
-
-          const minX = boardOffsetX + f.radius;
-          const maxX = boardOffsetX + boardWidth - f.radius;
-          const minY = boardOffsetY + f.radius;
-          const maxY = boardOffsetY + boardHeight - f.radius;
-
-          if (f.x < minX) { f.x = minX; f.vx = -f.vx; }
-          if (f.x > maxX) { f.x = maxX; f.vx = -f.vx; }
-          if (f.y < minY) { f.y = minY; f.vy = -f.vy; }
-          if (f.y > maxY) { f.y = maxY; f.vy = -f.vy; }
-        }
-      }
-
-      // 5. Food Consumption (가위바위보 밥 섭취 규칙)
-      for (const s of snakes) {
-        if (s.isDead) continue;
-        const radius = getCellRadius(s.exp);
-
-        for (let i = fruits.length - 1; i >= 0; i--) {
-          const f = fruits[i];
-          const dist = Math.sqrt((s.x - f.x) * (s.x - f.x) + (s.y - f.y) * (s.y - f.y));
-
-          // 밥과 플레이어 캐릭터의 충돌 판단 (반지름 합 기준)
-          if (dist < radius + f.radius) {
-            const rps = checkRPS(s.type, f.type);
-            if (rps === 1) { // 이기는 밥: 먹고 점수 획득
-              s.wins++;
-              fruits.splice(i, 1);
-              sound.playEat();
-
-              if (f.isStatic) {
-                spawnFruit(false); // 새로운 밥 스폰
-              }
-            } else if (rps === -1) { // 지는 밥: 즉시 사망
-              if (s.invulnerableTimer <= 0) {
-                killCell(s);
-                break;
-              }
+                boostBtn.addEventListener('pointerdown', (e) => {
+                    e.preventDefault();
+                    triggerBoost(i);
+                });
             }
-            // 비기는 밥 (rps === 0)은 그냥 통과
-          }
         }
-        updatePlayerStatsUI(s);
-      }
 
-      // 밥 개수 유지 (설정된 maxFoodCount에 맞춤)
-      const staticCount = fruits.filter(f => f.isStatic).length;
-      if (staticCount < maxFoodCount) {
-        for (let c = 0; c < maxFoodCount - staticCount; c++) {
-          spawnFruit(false);
-        }
-      }
+        function setupJoystickEvents(playerId, container, knob) {
+            let active = false;
+            let pointerId = null;
 
-      // 6. Cell-to-Cell Overlap Combat Physics (플레이어 간 가위바위보 상성 대결)
-      for (let i = 0; i < snakes.length; i++) {
-        const sA = snakes[i];
-        if (sA.isDead) continue;
+            let defaultCenterX = 0;
+            let defaultCenterY = 0;
 
-        for (let j = i + 1; j < snakes.length; j++) {
-          const sB = snakes[j];
-          if (sB.isDead) continue;
+            let containerX = 0;
+            let containerY = 0;
 
-          const dist = Math.sqrt((sA.x - sB.x) * (sA.x - sB.x) + (sA.y - sB.y) * (sA.y - sB.y));
-          const rA = getCellRadius(sA.exp);
-          const rB = getCellRadius(sB.exp);
+            let startX = 0;
+            let startY = 0;
 
-          if (dist < rA + rB) {
-            const rps = checkRPS(sA.type, sB.type);
-            if (rps === 1) { // sA가 sB를 이김
-              if (sB.invulnerableTimer <= 0) {
-                sA.wins++;
-                killCell(sB);
-                updatePlayerStatsUI(sA);
-              }
-            } else if (rps === -1) { // sB가 sA를 이김
-              if (sA.invulnerableTimer <= 0) {
-                sB.wins++;
-                killCell(sA);
-                updatePlayerStatsUI(sB);
-              }
+            container.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                sound.init();
+                active = true;
+                pointerId = e.pointerId;
+                container.setPointerCapture(e.pointerId);
+
+                const prevTransform = container.style.transform;
+                container.style.transform = 'none';
+                const rect = container.getBoundingClientRect();
+                defaultCenterX = rect.left + rect.width / 2;
+                defaultCenterY = rect.top + rect.height / 2;
+                container.style.transform = prevTransform;
+
+                containerX = e.clientX - defaultCenterX;
+                containerY = e.clientY - defaultCenterY;
+                container.style.transform = `translate(${containerX}px, ${containerY}px)`;
+
+                startX = e.clientX;
+                startY = e.clientY;
+
+                knob.style.transform = 'translate(0px, 0px)';
+
+                updateRelativeJoystick(e);
+            });
+
+            container.addEventListener('pointermove', (e) => {
+                if (active && e.pointerId === pointerId) {
+                    e.preventDefault();
+                    updateRelativeJoystick(e);
+                }
+            });
+
+            function updateRelativeJoystick(e) {
+                let dx = e.clientX - startX;
+                let dy = e.clientY - startY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const maxDrag = container.clientWidth / 2 - 8;
+                const angle = Math.atan2(dy, dx);
+
+                let knobX = dx;
+                let knobY = dy;
+
+                if (dist > maxDrag) {
+                    const excess = dist - maxDrag;
+                    const pullX = Math.cos(angle) * excess;
+                    const pullY = Math.sin(angle) * excess;
+
+                    containerX += pullX;
+                    containerY += pullY;
+                    container.style.transform = `translate(${containerX}px, ${containerY}px)`;
+
+                    startX += pullX;
+                    startY += pullY;
+
+                    knobX = Math.cos(angle) * maxDrag;
+                    knobY = Math.sin(angle) * maxDrag;
+                }
+
+                knob.style.transform = `translate(${knobX}px, ${knobY}px)`;
+
+                const cell = snakes.find(s => s.id === playerId);
+                if (cell && !cell.isDead) {
+                    if (dist > 5) {
+                        cell.angle = angle;
+                        cell.joystickActive = true;
+                    } else {
+                        cell.joystickActive = false;
+                    }
+                }
             }
-            // 비기는 상성은 서로 통과하여 겹칠 수 있음
-          }
-        }
-      }
-    }
 
-    function killCell(prey) {
-      prey.isDead = true;
-      prey.losses++; // 사망 시 짐(losses) 1 증가
-      sound.playCrash();
+            const stopDrag = (e) => {
+                if (active && e.pointerId === pointerId) {
+                    e.preventDefault();
+                    active = false;
+                    pointerId = null;
 
-      prey.oldExp = prey.exp;
-      scatterPellets(prey.x, prey.y);
+                    container.style.transform = 'translate(0px, 0px)';
+                    knob.style.transform = 'translate(0px, 0px)';
 
-      updatePlayerStatsUI(prey);
-      showRejoinUI(prey.id); // 죽었을 때 즉시 묵찌빠 부활 선택 UI 활성화
-    }
+                    const cell = snakes.find(s => s.id === playerId);
+                    if (cell) {
+                        cell.joystickActive = false;
+                    }
+                }
+            };
 
-    function scatterPellets(centerX, centerY) {
-      const scatterCount = 5;
-      for (let i = 0; i < scatterCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const force = 3 + Math.random() * 4;
-
-        fruits.push({
-          x: centerX,
-          y: centerY,
-          vx: Math.cos(angle) * force,
-          vy: Math.sin(angle) * force,
-          friction: 0.93,
-          value: 1,
-          radius: 18,
-          isStatic: false,
-          type: Math.floor(Math.random() * 3) + 1
-        });
-      }
-    }
-
-    /* =========================================================================
-       SPEED BOOSTER PROGRESS RING UI CONTROLLER
-       ========================================================================= */
-    function updateBoosterUI(s) {
-      const btn = document.getElementById(`boost-btn-p${s.id}`);
-      const ring = document.getElementById(`ring-progress-p${s.id}`);
-      const timerText = document.getElementById(`boost-timer-p${s.id}`);
-      if (!btn || !ring || !timerText) return;
-
-      if (s.isDead) {
-        btn.classList.add('cooldown');
-        timerText.style.display = 'none';
-        ring.style.strokeDashoffset = '163.36';
-        return;
-      }
-
-      if (s.boostTimeLeft > 0) {
-        btn.classList.add('active-boost');
-        btn.classList.remove('cooldown');
-        timerText.style.display = 'none';
-        ring.style.strokeDashoffset = '0';
-      } else if (s.boostCooldownTime > 0) {
-        btn.classList.remove('active-boost');
-        btn.classList.add('cooldown');
-        timerText.style.display = 'block';
-
-        timerText.textContent = `${Math.ceil(s.boostCooldownTime / 1000)}s`;
-
-        const waitTime = s.boostCooldownTime;
-        const ratio = waitTime / 10000;
-        ring.style.strokeDashoffset = `${163.36 * (1 - ratio)}`;
-      } else {
-        btn.classList.remove('active-boost');
-        btn.classList.remove('cooldown');
-        timerText.style.display = 'none';
-        ring.style.strokeDashoffset = '0';
-      }
-    }
-
-    /* =========================================================================
-       CANVAS RENDERING (GRID lines, GLOWS, BLOBS)
-       ========================================================================= */
-    function renderGame() {
-      ctx.fillStyle = '#06060b';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.save();
-
-      ctx.fillStyle = '#0a0a0f';
-      ctx.fillRect(boardOffsetX, boardOffsetY, boardWidth, boardHeight);
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
-      ctx.lineWidth = 1;
-
-      for (let c = 0; c <= GRID_COLS; c++) {
-        ctx.beginPath();
-        ctx.moveTo(boardOffsetX + c * cellSize, boardOffsetY);
-        ctx.lineTo(boardOffsetX + c * cellSize, boardOffsetY + boardHeight);
-        ctx.stroke();
-      }
-      for (let r = 0; r <= GRID_ROWS; r++) {
-        ctx.beginPath();
-        ctx.moveTo(boardOffsetX, boardOffsetY + r * cellSize);
-        ctx.lineTo(boardOffsetX + boardWidth, boardOffsetY + r * cellSize);
-        ctx.stroke();
-      }
-
-      // Draw glowing white border
-      ctx.save();
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 5;
-      ctx.shadowColor = 'rgba(255, 255, 255, 0.85)';
-      ctx.shadowBlur = 15;
-      ctx.strokeRect(boardOffsetX, boardOffsetY, boardWidth, boardHeight);
-      ctx.restore();
-
-      // Draw 가위바위보 밥
-      for (const f of fruits) {
-        ctx.save();
-        const img = rpsImages[f.type];
-        if (img && img.complete && img.naturalWidth !== 0) {
-          ctx.beginPath();
-          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
-          ctx.clip();
-          ctx.drawImage(img, f.x - f.radius, f.y - f.radius, f.radius * 2, f.radius * 2);
-
-          ctx.beginPath();
-          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-        } else {
-          ctx.beginPath();
-          ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
-          ctx.fillStyle = f.type === 1 ? '#ff2d55' : (f.type === 2 ? '#007aff' : '#4cd964');
-          ctx.fill();
-        }
-        ctx.restore();
-      }
-
-      // Draw Player Cells (가위바위보 캐릭터)
-      for (const s of snakes) {
-        if (s.isDead) continue;
-
-        const radius = getCellRadius(s.exp);
-
-        ctx.save();
-
-        // Dynamic Blinking logic for invulnerability state (toggle alpha every 150ms)
-        let cellAlpha = 1.0;
-        if (s.invulnerableTimer > 0) {
-          const isBlink = Math.floor(s.invulnerableTimer / 150) % 2 === 0;
-          cellAlpha = isBlink ? 0.3 : 0.85;
-        }
-        ctx.globalAlpha = cellAlpha;
-
-        ctx.shadowColor = s.color;
-        ctx.shadowBlur = 18;
-
-        const img = rpsImages[s.type];
-        if (img && img.complete && img.naturalWidth !== 0) {
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
-          ctx.fillStyle = '#12121c';
-          ctx.fill();
-
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, radius - 2, 0, Math.PI * 2);
-          ctx.clip();
-          ctx.drawImage(img, s.x - (radius - 2), s.y - (radius - 2), (radius - 2) * 2, (radius - 2) * 2);
-          ctx.restore();
-
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
-          ctx.strokeStyle = s.color;
-          ctx.lineWidth = 3;
-          ctx.stroke();
-        } else {
-          const grad = ctx.createRadialGradient(s.x, s.y, radius * 0.1, s.x, s.y, radius);
-          grad.addColorStop(0, s.color);
-          grad.addColorStop(1, darkenColor(s.color));
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
-          ctx.fill();
+            container.addEventListener('pointerup', stopDrag);
+            container.addEventListener('pointercancel', stopDrag);
+            container.addEventListener('pointerleave', stopDrag);
         }
 
-        // Draw score (Wins - Losses) inside center of player cell
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 3;
-        ctx.font = `bold 13px Orbitron`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
-        const scoreVal = s.wins - s.losses;
-        ctx.strokeText(scoreVal.toString(), s.x, s.y);
-        ctx.fillText(scoreVal.toString(), s.x, s.y);
-
-        // Draw Player ID Label (e.g. 1P) in player color above cell
-        ctx.fillStyle = s.color;
-        ctx.font = `bold 12px 'Noto Sans KR'`;
-        ctx.fillText(`${s.id}P`, s.x, s.y - radius - 10);
-
-        // Draw Heading direction nose
-        const noseX = s.x + Math.cos(s.angle) * radius;
-        const noseY = s.y + Math.sin(s.angle) * radius;
-        ctx.beginPath();
-        ctx.arc(noseX, noseY, 4, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
-        ctx.fill();
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.restore();
-      }
-
-      ctx.restore();
-    }
-
-    function checkRPS(a, b) {
-      if (a === b) return 0;
-      if ((a === 1 && b === 2) || (a === 2 && b === 3) || (a === 3 && b === 1)) {
-        return 1; // a 승리
-      }
-      return -1; // b 승리 (a 패배)
-    }
-
-    function darkenColor(hex) {
-      if (hex === '#ff2d55') return '#b30022';
-      if (hex === '#007aff') return '#004c99';
-      if (hex === '#4cd964') return '#1b8a30';
-      if (hex === '#ffcc00') return '#b38f00';
-      if (hex === '#af52de') return '#6e1ea3';
-      if (hex === '#00c7be') return '#00827c';
-      return hex;
-    }
-
-    /* =========================================================================
-       GAME OVER & LEADERBOARD LOGIC
-       ========================================================================= */
-    function endGame() {
-      clearInterval(timerInterval);
-      cancelAnimationFrame(animationFrameId);
-
-      sound.playGameOver();
-
-      const standings = [];
-      for (let i = 1; i <= playerCount; i++) {
-        const snake = snakes.find(s => s.id === i);
-        const w = snake ? snake.wins : 0;
-        const l = snake ? snake.losses : 0;
-        standings.push({
-          id: i,
-          color: PLAYER_DEFAULTS[i - 1].color,
-          wins: w,
-          losses: l,
-          score: w - l
-        });
-      }
-
-      // 정렬: 1순위 (이김 - 짐) 점수 높은 순, 2순위 이김(wins) 횟수가 많은 순
-      standings.sort((a, b) => {
-        if (b.score !== a.score) {
-          return b.score - a.score;
-        }
-        return b.wins - a.wins;
-      });
-
-      // 공동 순위 판정
-      const rankMap = {};
-      let currentRank = 1;
-      let prevScore = null;
-      let prevWins = null;
-
-      standings.forEach((player, index) => {
-        if (prevScore === null || player.score !== prevScore || player.wins !== prevWins) {
-          currentRank = index + 1;
-          prevScore = player.score;
-          prevWins = player.wins;
-        }
-        rankMap[player.id] = currentRank;
-      });
-
-      const rankCounts = {};
-      Object.values(rankMap).forEach(r => {
-        rankCounts[r] = (rankCounts[r] || 0) + 1;
-      });
-
-      const tbody = document.getElementById('leaderboard-body-overlay');
-      tbody.innerHTML = '';
-
-      standings.forEach((player) => {
-        const r = rankMap[player.id];
-        const isTie = rankCounts[r] > 1;
-        
-        const t = translations[currentLang];
-        let rankText = '';
-        if (isTie) {
-          rankText = t.jointRank.replace('{r}', r);
-        } else {
-          rankText = currentLang === 'ko' ? `${r}등` : `No. ${r}`;
+        function resetJoystickKnobUI(playerId) {
+            const knob = document.getElementById(`joy-knob-p${playerId}`);
+            if (knob) knob.style.transform = 'translate(0px, 0px)';
         }
 
-        const pName = currentLang === 'ko' ? `플레이어 ${player.id}` : `Player ${player.id}`;
+        function triggerBoost(playerId) {
+            const cell = snakes.find(s => s.id === playerId);
+            if (!cell || cell.isDead) return;
 
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
+            if (cell.boostCooldownTime <= 0) {
+                cell.boostTimeLeft = 3000;
+                cell.boostCooldownTime = 10000;
+                sound.playClick();
+            }
+        }
+
+        function updatePlayerStatsUI(s) {
+            const statsSpan = document.getElementById(`ctrl-stats-p${s.id}`);
+            if (statsSpan) {
+                const t = translations[currentLang];
+                statsSpan.textContent = t.scoreDisplay.replace('{w}', s.wins).replace('{l}', s.losses);
+            }
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemaining / 60);
+            const secs = timeRemaining % 60;
+            const strMins = String(mins).padStart(2, '0');
+            const strSecs = String(secs).padStart(2, '0');
+            document.getElementById('timer-display').textContent = `${strMins}:${strSecs}`;
+        }
+
+        function showRejoinUI(playerId) {
+            const rejoinDiv = document.getElementById(`rejoin-container-p${playerId}`);
+            if (rejoinDiv) rejoinDiv.style.display = 'flex';
+        }
+
+        function hideRejoinUI(playerId) {
+            const rejoinDiv = document.getElementById(`rejoin-container-p${playerId}`);
+            if (rejoinDiv) rejoinDiv.style.display = 'none';
+
+            const respawnStatus = document.getElementById(`respawn-status-p${playerId}`);
+            if (respawnStatus) respawnStatus.style.display = 'none';
+        }
+
+        function showRespawnTimerUI(playerId) {
+            // 자동 부활을 사용하지 않고 묵찌빠 선택 부활을 사용하므로 비워둡니다.
+        }
+
+        /* =========================================================================
+           CORE GAME LOOP (60FPS DELTA TIME DRIVEN)
+           ========================================================================= */
+        function gameLoop(time) {
+            animationFrameId = requestAnimationFrame(gameLoop);
+
+            if (!lastTime) lastTime = time;
+            let dt = time - lastTime;
+            lastTime = time;
+
+            if (dt > 100) dt = 100;
+
+            updateGame(dt);
+            renderGame();
+        }
+
+        /* =========================================================================
+           GAME STATE UPDATES (MOVEMENT, COLLISIONS, EAT LOGIC)
+           ========================================================================= */
+        function updateGame(dt) {
+            // 1. Determine Underdog Tags
+            const aliveCells = snakes.filter(s => !s.isDead);
+            if (aliveCells.length >= 2) {
+                const sorted = [...aliveCells].sort((a, b) => b.exp - a.exp);
+                firstPlaceCell = sorted[0];
+                lastPlaceCell = sorted[sorted.length - 1];
+
+                if (firstPlaceCell.exp === lastPlaceCell.exp) {
+                    firstPlaceCell = null;
+                    lastPlaceCell = null;
+                }
+            } else {
+                firstPlaceCell = null;
+                lastPlaceCell = null;
+            }
+
+            // 2. Process Booster Cooldown indicators (자동 부활 삭제, 선택 부활만 사용)
+            for (const s of snakes) {
+                if (!s.isDead && s.invulnerableTimer > 0) {
+                    s.invulnerableTimer -= dt;
+                }
+
+                if (s.boostTimeLeft > 0) {
+                    s.boostTimeLeft -= dt;
+                    if (s.boostTimeLeft < 0) s.boostTimeLeft = 0;
+                }
+                if (s.boostCooldownTime > 0) {
+                    s.boostCooldownTime -= dt;
+                    if (s.boostCooldownTime < 0) s.boostCooldownTime = 0;
+                }
+
+                updateBoosterUI(s);
+            }
+
+            // 3. Smooth Analog Movement (속도 조절 gameSpeedMultiplier 연동)
+            for (const s of snakes) {
+                if (s.isDead) continue;
+
+                let speedMultiplier = 1.0;
+                if (s.boostTimeLeft > 0) {
+                    speedMultiplier = 1.7;
+                }
+
+                const baseSpeed = Math.max(1.2, 3.2 - 0.15 * Math.log2(s.exp));
+                const speed = baseSpeed * speedMultiplier * gameSpeedMultiplier;
+
+                s.x += Math.cos(s.angle) * speed;
+                s.y += Math.sin(s.angle) * speed;
+
+                // Wall boundary containment check: DIE immediately if wall border is touched
+                const radius = getCellRadius(s.exp);
+                if (s.x - radius < boardOffsetX || s.x + radius > boardOffsetX + boardWidth ||
+                    s.y - radius < boardOffsetY || s.y + radius > boardOffsetY + boardHeight) {
+                    killCell(s);
+                }
+            }
+
+            // 4. Update food pellet drift physics & bounce off board borders (속도 조절 연동)
+            for (const f of fruits) {
+                if (f.vx !== undefined && f.vy !== undefined) {
+                    f.x += f.vx * gameSpeedMultiplier;
+                    f.y += f.vy * gameSpeedMultiplier;
+
+                    // 꼼지락 꼼지락 랜덤 방향 비틀기 (속도가 빠를수록 빈도 증가 연동)
+                    if (Math.random() < 0.02 * gameSpeedMultiplier) {
+                        const currentSpeed = Math.sqrt(f.vx * f.vx + f.vy * f.vy);
+                        const angleChange = (Math.random() - 0.5) * 0.8;
+                        const newAngle = Math.atan2(f.vy, f.vx) + angleChange;
+                        f.vx = Math.cos(newAngle) * currentSpeed;
+                        f.vy = Math.sin(newAngle) * currentSpeed;
+                    }
+
+                    f.vx *= f.friction;
+                    f.vy *= f.friction;
+
+                    // Decelerating scattered pellets clamp at their specific mass-proportional baseline speed
+                    const targetBaseSpeed = 1.0;
+                    const currentSpeed = Math.sqrt(f.vx * f.vx + f.vy * f.vy);
+                    if (currentSpeed < targetBaseSpeed && currentSpeed > 0.01) {
+                        const angle = Math.atan2(f.vy, f.vx);
+                        f.vx = Math.cos(angle) * targetBaseSpeed;
+                        f.vy = Math.sin(angle) * targetBaseSpeed;
+                        f.friction = 1.0;
+                    }
+
+                    const minX = boardOffsetX + f.radius;
+                    const maxX = boardOffsetX + boardWidth - f.radius;
+                    const minY = boardOffsetY + f.radius;
+                    const maxY = boardOffsetY + boardHeight - f.radius;
+
+                    if (f.x < minX) { f.x = minX; f.vx = -f.vx; }
+                    if (f.x > maxX) { f.x = maxX; f.vx = -f.vx; }
+                    if (f.y < minY) { f.y = minY; f.vy = -f.vy; }
+                    if (f.y > maxY) { f.y = maxY; f.vy = -f.vy; }
+                }
+            }
+
+            // 5. Food Consumption (가위바위보 밥 섭취 규칙)
+            for (const s of snakes) {
+                if (s.isDead) continue;
+                const radius = getCellRadius(s.exp);
+
+                for (let i = fruits.length - 1; i >= 0; i--) {
+                    const f = fruits[i];
+                    const dist = Math.sqrt((s.x - f.x) * (s.x - f.x) + (s.y - f.y) * (s.y - f.y));
+
+                    // 밥과 플레이어 캐릭터의 충돌 판단 (반지름 합 기준)
+                    if (dist < radius + f.radius) {
+                        const rps = checkRPS(s.type, f.type);
+                        if (rps === 1) { // 이기는 밥: 먹고 점수 획득
+                            s.wins++;
+                            fruits.splice(i, 1);
+                            sound.playEat();
+
+                            if (f.isStatic) {
+                                spawnFruit(false); // 새로운 밥 스폰
+                            }
+                        } else if (rps === -1) { // 지는 밥: 즉시 사망
+                            if (s.invulnerableTimer <= 0) {
+                                killCell(s);
+                                break;
+                            }
+                        }
+                        // 비기는 밥 (rps === 0)은 그냥 통과
+                    }
+                }
+                updatePlayerStatsUI(s);
+            }
+
+            // 밥 개수 유지 (설정된 maxFoodCount에 맞춤)
+            const staticCount = fruits.filter(f => f.isStatic).length;
+            if (staticCount < maxFoodCount) {
+                for (let c = 0; c < maxFoodCount - staticCount; c++) {
+                    spawnFruit(false);
+                }
+            }
+
+            // 6. Cell-to-Cell Overlap Combat Physics (플레이어 간 가위바위보 상성 대결)
+            for (let i = 0; i < snakes.length; i++) {
+                const sA = snakes[i];
+                if (sA.isDead) continue;
+
+                for (let j = i + 1; j < snakes.length; j++) {
+                    const sB = snakes[j];
+                    if (sB.isDead) continue;
+
+                    const dist = Math.sqrt((sA.x - sB.x) * (sA.x - sB.x) + (sA.y - sB.y) * (sA.y - sB.y));
+                    const rA = getCellRadius(sA.exp);
+                    const rB = getCellRadius(sB.exp);
+
+                    if (dist < rA + rB) {
+                        const rps = checkRPS(sA.type, sB.type);
+                        if (rps === 1) { // sA가 sB를 이김
+                            if (sB.invulnerableTimer <= 0) {
+                                sA.wins++;
+                                killCell(sB);
+                                updatePlayerStatsUI(sA);
+                            }
+                        } else if (rps === -1) { // sB가 sA를 이김
+                            if (sA.invulnerableTimer <= 0) {
+                                sB.wins++;
+                                killCell(sA);
+                                updatePlayerStatsUI(sB);
+                            }
+                        }
+                        // 비기는 상성은 서로 통과하여 겹칠 수 있음
+                    }
+                }
+            }
+        }
+
+        function killCell(prey) {
+            prey.isDead = true;
+            prey.losses++; // 사망 시 짐(losses) 1 증가
+            sound.playCrash();
+
+            prey.oldExp = prey.exp;
+            scatterPellets(prey.x, prey.y);
+
+            updatePlayerStatsUI(prey);
+            showRejoinUI(prey.id); // 죽었을 때 즉시 묵찌빠 부활 선택 UI 활성화
+        }
+
+        function scatterPellets(centerX, centerY) {
+            const scatterCount = 5;
+            for (let i = 0; i < scatterCount; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const force = 3 + Math.random() * 4;
+
+                fruits.push({
+                    x: centerX,
+                    y: centerY,
+                    vx: Math.cos(angle) * force,
+                    vy: Math.sin(angle) * force,
+                    friction: 0.93,
+                    value: 1,
+                    radius: 18,
+                    isStatic: false,
+                    type: Math.floor(Math.random() * 3) + 1
+                });
+            }
+        }
+
+        /* =========================================================================
+           SPEED BOOSTER PROGRESS RING UI CONTROLLER
+           ========================================================================= */
+        function updateBoosterUI(s) {
+            const btn = document.getElementById(`boost-btn-p${s.id}`);
+            const ring = document.getElementById(`ring-progress-p${s.id}`);
+            const timerText = document.getElementById(`boost-timer-p${s.id}`);
+            if (!btn || !ring || !timerText) return;
+
+            if (s.isDead) {
+                btn.classList.add('cooldown');
+                timerText.style.display = 'none';
+                ring.style.strokeDashoffset = '163.36';
+                return;
+            }
+
+            if (s.boostTimeLeft > 0) {
+                btn.classList.add('active-boost');
+                btn.classList.remove('cooldown');
+                timerText.style.display = 'none';
+                ring.style.strokeDashoffset = '0';
+            } else if (s.boostCooldownTime > 0) {
+                btn.classList.remove('active-boost');
+                btn.classList.add('cooldown');
+                timerText.style.display = 'block';
+
+                timerText.textContent = `${Math.ceil(s.boostCooldownTime / 1000)}s`;
+
+                const waitTime = s.boostCooldownTime;
+                const ratio = waitTime / 10000;
+                ring.style.strokeDashoffset = `${163.36 * (1 - ratio)}`;
+            } else {
+                btn.classList.remove('active-boost');
+                btn.classList.remove('cooldown');
+                timerText.style.display = 'none';
+                ring.style.strokeDashoffset = '0';
+            }
+        }
+
+        /* =========================================================================
+           CANVAS RENDERING (GRID lines, GLOWS, BLOBS)
+           ========================================================================= */
+        function renderGame() {
+            ctx.fillStyle = '#06060b';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+
+            ctx.fillStyle = '#0a0a0f';
+            ctx.fillRect(boardOffsetX, boardOffsetY, boardWidth, boardHeight);
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+            ctx.lineWidth = 1;
+
+            for (let c = 0; c <= GRID_COLS; c++) {
+                ctx.beginPath();
+                ctx.moveTo(boardOffsetX + c * cellSize, boardOffsetY);
+                ctx.lineTo(boardOffsetX + c * cellSize, boardOffsetY + boardHeight);
+                ctx.stroke();
+            }
+            for (let r = 0; r <= GRID_ROWS; r++) {
+                ctx.beginPath();
+                ctx.moveTo(boardOffsetX, boardOffsetY + r * cellSize);
+                ctx.lineTo(boardOffsetX + boardWidth, boardOffsetY + r * cellSize);
+                ctx.stroke();
+            }
+
+            // Draw glowing white border
+            ctx.save();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 5;
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.85)';
+            ctx.shadowBlur = 15;
+            ctx.strokeRect(boardOffsetX, boardOffsetY, boardWidth, boardHeight);
+            ctx.restore();
+
+            // Draw 가위바위보 밥
+            for (const f of fruits) {
+                ctx.save();
+                const img = rpsImages[f.type];
+                if (img && img.complete && img.naturalWidth !== 0) {
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(img, f.x - f.radius, f.y - f.radius, f.radius * 2, f.radius * 2);
+
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = f.type === 1 ? '#ff2d55' : (f.type === 2 ? '#007aff' : '#4cd964');
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            // Draw Player Cells (가위바위보 캐릭터)
+            for (const s of snakes) {
+                if (s.isDead) continue;
+
+                const radius = getCellRadius(s.exp);
+
+                ctx.save();
+
+                // Dynamic Blinking logic for invulnerability state (toggle alpha every 150ms)
+                let cellAlpha = 1.0;
+                if (s.invulnerableTimer > 0) {
+                    const isBlink = Math.floor(s.invulnerableTimer / 150) % 2 === 0;
+                    cellAlpha = isBlink ? 0.3 : 0.85;
+                }
+                ctx.globalAlpha = cellAlpha;
+
+                ctx.shadowColor = s.color;
+                ctx.shadowBlur = 18;
+
+                const img = rpsImages[s.type];
+                if (img && img.complete && img.naturalWidth !== 0) {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = '#12121c';
+                    ctx.fill();
+
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, radius - 2, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(img, s.x - (radius - 2), s.y - (radius - 2), (radius - 2) * 2, (radius - 2) * 2);
+                    ctx.restore();
+
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
+                    ctx.strokeStyle = s.color;
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                } else {
+                    const grad = ctx.createRadialGradient(s.x, s.y, radius * 0.1, s.x, s.y, radius);
+                    grad.addColorStop(0, s.color);
+                    grad.addColorStop(1, darkenColor(s.color));
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Draw score (Wins - Losses) inside center of player cell
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 3;
+                ctx.font = `bold 13px Orbitron`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                const scoreVal = s.wins - s.losses;
+                ctx.strokeText(scoreVal.toString(), s.x, s.y);
+                ctx.fillText(scoreVal.toString(), s.x, s.y);
+
+                // Draw Player ID Label (e.g. 1P) in player color above cell
+                ctx.fillStyle = s.color;
+                ctx.font = `bold 12px 'Noto Sans KR'`;
+                ctx.fillText(`${s.id}P`, s.x, s.y - radius - 10);
+
+                // Draw Heading direction nose
+                const noseX = s.x + Math.cos(s.angle) * radius;
+                const noseY = s.y + Math.sin(s.angle) * radius;
+                ctx.beginPath();
+                ctx.arc(noseX, noseY, 4, 0, Math.PI * 2);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            ctx.restore();
+        }
+
+        function checkRPS(a, b) {
+            if (a === b) return 0;
+            if ((a === 1 && b === 2) || (a === 2 && b === 3) || (a === 3 && b === 1)) {
+                return 1; // a 승리
+            }
+            return -1; // b 승리 (a 패배)
+        }
+
+        function darkenColor(hex) {
+            if (hex === '#ff2d55') return '#b30022';
+            if (hex === '#007aff') return '#004c99';
+            if (hex === '#4cd964') return '#1b8a30';
+            if (hex === '#ffcc00') return '#b38f00';
+            if (hex === '#af52de') return '#6e1ea3';
+            if (hex === '#00c7be') return '#00827c';
+            return hex;
+        }
+
+        /* =========================================================================
+           GAME OVER & LEADERBOARD LOGIC
+           ========================================================================= */
+        function endGame() {
+            clearInterval(timerInterval);
+            cancelAnimationFrame(animationFrameId);
+
+            sound.playGameOver();
+
+            const standings = [];
+            for (let i = 1; i <= playerCount; i++) {
+                const snake = snakes.find(s => s.id === i);
+                const w = snake ? snake.wins : 0;
+                const l = snake ? snake.losses : 0;
+                standings.push({
+                    id: i,
+                    color: PLAYER_DEFAULTS[i - 1].color,
+                    wins: w,
+                    losses: l,
+                    score: w - l
+                });
+            }
+
+            // 정렬: 1순위 (이김 - 짐) 점수 높은 순, 2순위 이김(wins) 횟수가 많은 순
+            standings.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+                return b.wins - a.wins;
+            });
+
+            // 공동 순위 판정
+            const rankMap = {};
+            let currentRank = 1;
+            let prevScore = null;
+            let prevWins = null;
+
+            standings.forEach((player, index) => {
+                if (prevScore === null || player.score !== prevScore || player.wins !== prevWins) {
+                    currentRank = index + 1;
+                    prevScore = player.score;
+                    prevWins = player.wins;
+                }
+                rankMap[player.id] = currentRank;
+            });
+
+            const rankCounts = {};
+            Object.values(rankMap).forEach(r => {
+                rankCounts[r] = (rankCounts[r] || 0) + 1;
+            });
+
+            const tbody = document.getElementById('leaderboard-body-overlay');
+            tbody.innerHTML = '';
+
+            standings.forEach((player) => {
+                const r = rankMap[player.id];
+                const isTie = rankCounts[r] > 1;
+
+                const t = translations[currentLang];
+                let rankText = '';
+                if (isTie) {
+                    rankText = t.jointRank.replace('{r}', r);
+                } else {
+                    rankText = currentLang === 'ko' ? `${r}등` : `No. ${r}`;
+                }
+
+                const pName = currentLang === 'ko' ? `플레이어 ${player.id}` : `Player ${player.id}`;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
           <td>${rankText}</td>
           <td style="color: ${player.color}">${pName}</td>
           <td>${player.wins}</td>
           <td>${player.losses}</td>
           <td>${player.score}</td>
         `;
-        tbody.appendChild(tr);
-      });
+                tbody.appendChild(tr);
+            });
 
-      document.getElementById('gameover-overlay').style.display = 'block';
-    }
-  </script>
+            document.getElementById('gameover-overlay').style.display = 'block';
+        }
+    </script>
 </body>
 
 </html>
